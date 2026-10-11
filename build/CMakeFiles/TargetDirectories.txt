@@ -1,0 +1,4 @@
+C:/Documents/Projects/shooting-game_st-00t/build/CMakeFiles/glad.dir
+C:/Documents/Projects/shooting-game_st-00t/build/CMakeFiles/shuguang.dir
+C:/Documents/Projects/shooting-game_st-00t/build/CMakeFiles/edit_cache.dir
+C:/Documents/Projects/shooting-game_st-00t/build/CMakeFiles/rebuild_cache.dir

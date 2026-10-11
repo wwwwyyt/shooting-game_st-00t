@@ -1,0 +1,6 @@
+# ninja log v7
+13	1559	8134340856590144	CMakeFiles/glad.dir/external/glad/src/glad.c.obj	45d0f18b7d00672d
+27	1593	8134340856739009	CMakeFiles/shuguang.dir/src/graphic.c.obj	4cd6b9b469f4b7ee
+19	1602	8134340856659197	CMakeFiles/shuguang.dir/src/main.c.obj	29a6552d355e76a3
+1563	1819	8134340872091549	libglad.a	e418cdb53234d03
+1819	2044	8134340874654937	C:/Documents/Projects/shooting-game_st-00t/shuguang.exe	25182f5736b9f580
