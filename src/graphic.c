@@ -58,7 +58,7 @@ static void initQuadVBO(void)
 void GRAPHIC_Init(lua_State *L)
 {
         /* 加载配置 */
-        lua_getglobal(L, "textures");
+        lua_getfield(L, -1, "textures");
         if (!lua_istable(L, -1))
         {
                 SDL_Log("Field 'textures' is not a table\n");
@@ -102,8 +102,7 @@ void GRAPHIC_SetMode(SDL_Window *window, GraphicMode mode)
 
                 /* 投影 */
                 glMatrixMode(GL_PROJECTION);
-                glLoadIdentity(); // 将投影矩阵重置为单位矩阵
-                /* TODO: 理解 Ortho 矩阵的含义 */
+                glLoadIdentity();                                    // 将投影矩阵重置为单位矩阵
                 glOrtho(0, LOGICAL_WIDTH, LOGICAL_HEIGHT, 0, -1, 1); // 将正交矩阵写入投影矩阵
 
                 /* 模型视图 */
@@ -195,15 +194,17 @@ Texture GRAPHIC_LoadTexture(const char *path)
         glGenTextures(1, &(tex.id));
         glBindTexture(GL_TEXTURE_2D, tex.id);
 
-        // ABGR8888 对应 GL_RGBA + GL_UNSIGNED_BYTE
+        /* 将 CPU 中的像素数据上传至 GPU */
+        /* ABGR8888 对应 GL_RGBA + GL_UNSIGNED_BYTE */
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
                      converted->w, converted->h, 0,
                      GL_RGBA, GL_UNSIGNED_BYTE, converted->pixels);
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        /* 设置纹理采样规则 */
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);   /* 纹理缩小时采用最邻近采样 */
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);   /* 纹理放大时采用最邻近采样 */
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); /* 纹理环绕时水平方向以边缘色重复 */
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); /* 纹理环绕时垂直方向以边缘色重复 */
 
         SDL_DestroySurface(converted);
         return tex;
