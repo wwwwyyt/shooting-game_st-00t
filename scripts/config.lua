@@ -8,8 +8,38 @@ textures = {
     }
 }
 
-model3ds = {
-    {
+model3d = {
 
+}
+
+-- 输入绑定
+input = {
+    {
+        key = "i",
+        signal = "up"
     },
+    {
+        key = "k",
+        signal = "down"
+    },
+    {
+        key = "j",
+        signal = "left"
+    },
+    {
+        key = "l",
+        signal = "right"
+    },
+    {
+        key = "z",
+        signal = "attack"
+    },
+    {
+        key = "x",
+        signal = "boom"
+    },
+    {
+        key = "shift",
+        signal = "switch"
+    }
 }

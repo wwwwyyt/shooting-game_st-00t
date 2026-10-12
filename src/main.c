@@ -15,6 +15,7 @@
 #include <stdio.h>
 
 #include "graphic.h"
+#include "input.h"
 
 static const char *APP_NAME = "shuguang";
 static const char *APP_VERSION = "0.1.0";
@@ -52,6 +53,9 @@ static void init(void)
         /* 初始化 GRAPHIC 模块 */
         GRAPHIC_Init(L);
         GRAPHIC_SetMode(window, MODE_2D);
+
+        /* 初始化 INPUT 模块 */
+        INPUT_Init(L);
 }
 
 static void update(double time, const double dt)
@@ -82,8 +86,9 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
                            APP_VERSION,
                            APP_IDENTIFIER);
 
-        /* 初始化 SDL 视频子系统 */
-        if (!SDL_Init(SDL_INIT_VIDEO))
+        /* 初始化 SDL */
+        /* 包括: 视频子系统、手柄子系统 */
+        if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD))
         {
                 SDL_Log("Couldn't initialize SDL: %s",
                         SDL_GetError());
@@ -148,7 +153,21 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                 /* 终止程序，向 OS 报告成功 */
                 return SDL_APP_SUCCESS;
         case SDL_EVENT_KEY_DOWN:
-                /* 处理键盘输入 */
+                /* 处理键盘按下 */
+                INPUT_DoKeyDown(event);
+                break;
+        case SDL_EVENT_GAMEPAD_ADDED:
+                /* 处理手柄连接 */
+                INPUT_GamePadAdded(event);
+                break;
+        case SDL_EVENT_GAMEPAD_REMOVED:
+                /* 处理手柄断开连接 */
+                INPUT_GamePadRemoved(event);
+                break;
+        case SDL_EVENT_GAMEPAD_BUTTON_DOWN:
+                /* 处理手柄按钮按下 */
+                INPUT_DoGamePadBtnDown(event);
+                break;
         case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED:
                 /* 处理窗口像素尺寸变化 */
                 GRAPHIC_SetMode(window, MODE_2D);
