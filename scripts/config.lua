@@ -2,12 +2,10 @@ return {
     -- 资源文件
     textures = {
         {
-            id = "grids",
-            file = "assets/textures/grids_2026-10-02.png",
+            file = "assets/texture/grids_2026-10-02.png",
         },
         {
-            id = "player01",
-            file = "assets/textures/player01_64x64_2026-10-02_01.png",
+            file = "assets/texture/player01_64x64_2026-10-02_01.png",
         }
     },
 

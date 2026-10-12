@@ -39,7 +39,7 @@ typedef struct
 
 void GRAPHIC_Init(lua_State *L);
 void GRAPHIC_SetMode(SDL_Window *window, GraphicMode mode);
-void GRAPHIC_DrawSprite(GLuint texture, float x, float y, float w, float h);
+void GRAPHIC_DrawSprite(int idx, float x, float y, float w, float h);
 Texture GRAPHIC_LoadTexture(const char *path);
 
 #endif /* GRAPHIC_H */

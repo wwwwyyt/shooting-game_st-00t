@@ -68,6 +68,8 @@ static void render(void)
         glClearColor(APP_CLEAR_COLOR_R, APP_CLEAR_COLOR_G, APP_CLEAR_COLOR_B, APP_CLEAR_COLOR_A);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        GRAPHIC_DrawSprite(0, 0, 0, 640, 480);
+
         /* 交换缓冲，显示渲染内容 */
         SDL_GL_SwapWindow(window);
 }
@@ -90,8 +92,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
         /* 包括: 视频子系统、手柄子系统 */
         if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD))
         {
-                SDL_Log("Couldn't initialize SDL: %s",
-                        SDL_GetError());
+                SDL_Log("Couldn't initialize SDL: %s", SDL_GetError());
                 return SDL_APP_FAILURE;
         }
 

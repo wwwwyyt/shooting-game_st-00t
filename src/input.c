@@ -63,7 +63,6 @@ void INPUT_DoGamePadBtnPressing(void)
 {
         for (int i = 0; i < GAMEPAD_CNT; ++i)
         {
-
                 if (gamepads[i])
                 {
                         /* 获取手柄摇杆值和进行按键处理 */

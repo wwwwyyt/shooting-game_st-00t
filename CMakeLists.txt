@@ -61,6 +61,7 @@ endif()
 set(SOURCES
   src/main.c
   src/graphic.c
+  src/input.c
 )
 #### 源码管理 ####
 

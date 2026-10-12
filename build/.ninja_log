@@ -1,6 +1,22 @@
 # ninja log v7
 13	1559	8134340856590144	CMakeFiles/glad.dir/external/glad/src/glad.c.obj	45d0f18b7d00672d
-27	1593	8134340856739009	CMakeFiles/shuguang.dir/src/graphic.c.obj	4cd6b9b469f4b7ee
-19	1602	8134340856659197	CMakeFiles/shuguang.dir/src/main.c.obj	29a6552d355e76a3
+22	1800	8134927441539364	CMakeFiles/shuguang.dir/src/graphic.c.obj	4cd6b9b469f4b7ee
+13	1071	8134928050332336	CMakeFiles/shuguang.dir/src/main.c.obj	29a6552d355e76a3
 1563	1819	8134340872091549	libglad.a	e418cdb53234d03
-1819	2044	8134340874654937	C:/Documents/Projects/shooting-game_st-00t/shuguang.exe	25182f5736b9f580
+1071	1256	8134928060859340	C:/Documents/Projects/shooting-game_st-00t/shuguang.exe	b179e35880dfacd6
+19	211	8134928050392223	CMakeFiles/shuguang.dir/src/input.c.obj	28decf12749d7248
+7	2115	8134929793600470	build.ninja	6bb16bf41dde7597
+7	2115	8134929793600470	C:/Documents/Projects/shooting-game_st-00t/build/cmake_install.cmake	6bb16bf41dde7597
+19	1184	8134929794196884	CMakeFiles/shuguang.dir/src/graphic.c.obj	4cd6b9b469f4b7ee
+13	1192	8134929794137055	CMakeFiles/shuguang.dir/src/main.c.obj	29a6552d355e76a3
+1193	1424	8134929805937216	C:/Documents/Projects/shooting-game_st-00t/shuguang.exe	b179e35880dfacd6
+11	1370	8134930515284303	CMakeFiles/shuguang.dir/src/main.c.obj	29a6552d355e76a3
+19	1399	8134930515333160	CMakeFiles/shuguang.dir/src/graphic.c.obj	4cd6b9b469f4b7ee
+1399	1597	8134930529165893	C:/Documents/Projects/shooting-game_st-00t/shuguang.exe	b179e35880dfacd6
+12	1083	8134938756440410	CMakeFiles/shuguang.dir/src/graphic.c.obj	4cd6b9b469f4b7ee
+1084	1262	8134938767100392	C:/Documents/Projects/shooting-game_st-00t/shuguang.exe	b179e35880dfacd6
+11	1117	8134939121349406	CMakeFiles/shuguang.dir/src/graphic.c.obj	4cd6b9b469f4b7ee
+1117	1303	8134939132363610	C:/Documents/Projects/shooting-game_st-00t/shuguang.exe	b179e35880dfacd6
+18	208	8134939518605177	CMakeFiles/shuguang.dir/src/input.c.obj	28decf12749d7248
+11	1070	8134939518548691	CMakeFiles/shuguang.dir/src/main.c.obj	29a6552d355e76a3
+1071	1264	8134939529135831	C:/Documents/Projects/shooting-game_st-00t/shuguang.exe	b179e35880dfacd6

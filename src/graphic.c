@@ -76,6 +76,7 @@ void GRAPHIC_Init(lua_State *L)
                 lua_getfield(L, -1, "file");
                 const char *file = lua_tostring(L, -1);
                 textures.data[i - 1] = GRAPHIC_LoadTexture(file);
+
                 lua_pop(L, 1);
 
                 /* 弹出 textures[i] */
@@ -142,9 +143,9 @@ void GRAPHIC_SetMode(SDL_Window *window, GraphicMode mode)
         }
 }
 
-void GRAPHIC_DrawSprite(GLuint texture, float x, float y, float w, float h)
+void GRAPHIC_DrawSprite(int idx, float x, float y, float w, float h)
 {
-        glBindTexture(GL_TEXTURE_2D, texture);
+        glBindTexture(GL_TEXTURE_2D, textures.data[idx].id);
 
         /* 模型视图矩阵: 平移到 (x,y)，缩放到 (w,h) */
         glMatrixMode(GL_MODELVIEW);
@@ -181,12 +182,18 @@ Texture GRAPHIC_LoadTexture(const char *path)
 
         SDL_Surface *surface = IMG_Load(path);
         if (!surface)
+        {
+                SDL_Log("Load texture failed: %s\n", SDL_GetError());
                 return tex;
+        }
 
         SDL_Surface *converted = SDL_ConvertSurface(surface, SDL_PIXELFORMAT_ABGR8888);
         SDL_DestroySurface(surface);
         if (!converted)
+        {
+                SDL_Log("Load texture failed: %s\n", SDL_GetError());
                 return tex;
+        }
 
         tex.width = converted->w;
         tex.height = converted->h;
