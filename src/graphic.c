@@ -177,6 +177,7 @@ int GRAPHIC_DrawSprite(int idx, SDL_FRect *srcrect, SDL_FRect *dstrect)
                 sw = (float)tex->width;
                 sh = (float)tex->height;
         }
+
         /* 将源矩形转换为归一化的纹理坐标 */
         float u0 = sx / (float)tex->width;
         float v0 = sy / (float)tex->height;

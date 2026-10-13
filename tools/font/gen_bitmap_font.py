@@ -7,8 +7,9 @@ gen_bitmap_font.py
 从系统字体（TTF/OTF）或点阵字体（BDF）生成复古游戏风格的位图字库。
 
 输出：
-    <prefix>.bmp   单张位图字库，字符按等宽格子（默认 16x16）排布
-    <prefix>.csv   字符 -> 图集坐标 对照表（可选 xlsx）
+    <prefix>_black.png   单张位图字库（黑色字符 / 透明背景）
+    <prefix>_white.png   单张位图字库（白色字符 / 透明背景）
+    <prefix>.csv         字符 -> 图集坐标 对照表（可选 xlsx）
 
 用法：
     # TTF / OTF
@@ -59,13 +60,13 @@ SKIP_CHARS = {"\r", "\n", "\t", "\ufeff", "\u200b", "\u200c", "\u200d"}
 
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(
-        description="从系统字体生成复古游戏风格的位图字库（单 BMP + 对照表）",
+        description="从系统字体生成复古游戏风格的位图字库（透明背景 PNG + 对照表）",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument("text_file",
                         help="包含所需字符的文本文件（UTF-8 编码）")
     parser.add_argument("-o", "--output", default="font",
-                        help="输出文件前缀，默认 font（生成 font.bmp / font.csv）")
+                        help="输出文件前缀，默认 font（生成 font_black.png / font_white.png / font.csv）")
     parser.add_argument("--font", default="simsun.ttc",
                         help="字体文件完整路径、系统字体名，或 .bdf 点阵字体，默认 simsun.ttc")
     parser.add_argument("--font-index", type=int, default=0,
@@ -84,10 +85,8 @@ def parse_args(argv=None):
     parser.add_argument("--table", choices=("csv", "xlsx", "both", "none"),
                         default="csv",
                         help="对照表输出格式，默认 csv")
-    parser.add_argument("--bit-depth", choices=("1", "8"), default="1",
-                        help="BMP 位深：1=单色（默认，体积最小），8=灰度")
     parser.add_argument("--preview", action="store_true",
-                        help="额外输出 4 倍放大的 PNG 预览图，便于肉眼检查")
+                        help="额外输出 4 倍放大的 PNG 预览图（白底黑字），便于肉眼检查")
     parser.add_argument("--no-ascii", action="store_true",
                         help="不强制包含 ASCII 可打印字符（默认会强制包含）")
     args = parser.parse_args(argv)
@@ -197,7 +196,8 @@ def fit_font_to_cell(chars, font_spec, index, cell, min_size=4):
 
 def render_glyph(ch: str, font, cell: int, baseline: float, threshold: int) -> Image.Image:
     """
-    把单个字符渲染到 cell x cell 的灰度图上，并做二值化。
+    把单个字符渲染到 cell x cell 的灰度遮罩上，并做二值化。
+    结果中 255 表示墨迹（字符），0 表示背景。
     窄字符（ASCII 等）按字宽水平居中；全角字符刚好铺满格子。
     """
     img = Image.new("L", (cell, cell), 0)
@@ -216,7 +216,7 @@ def render_glyph(ch: str, font, cell: int, baseline: float, threshold: int) -> I
 
 
 def build_atlas(chars, font, args):
-    """TTF/OTF 分支：逐字渲染到图集。baseline 必须已在 args 中设置。"""
+    """TTF/OTF 分支：逐字渲染到图集遮罩。baseline 必须已在 args 中设置。"""
     cell = args.size
     cols = args.cols
     rows = math.ceil(len(chars) / cols)
@@ -300,7 +300,7 @@ def parse_bdf(path):
 
 
 def build_atlas_from_bdf(chars, bdf_path, args):
-    """BDF 分支：直接把位图字形拼进图集，跳过渲染与基线计算。"""
+    """BDF 分支：直接把位图字形拼进图集遮罩，跳过渲染与基线计算。"""
     glyphs = parse_bdf(bdf_path)
     if not glyphs:
         sys.exit(f"BDF 文件 {bdf_path} 中没有解析到任何字形。")
@@ -365,6 +365,23 @@ def build_atlas_from_bdf(chars, bdf_path, args):
 
 
 # --------------------------------------------------------------------------- #
+#  图片输出：遮罩 -> RGBA（透明背景）
+# --------------------------------------------------------------------------- #
+
+def mask_to_rgba(mask: Image.Image, color=(0, 0, 0)) -> Image.Image:
+    """
+    把 L 模式的墨迹遮罩（255=字符，0=背景）转换成 RGBA 图：
+    字符用 color 着色，背景 alpha=0（完全透明）。
+
+    这样导出的 PNG 可以直接叠在任意背景上使用，
+    黑字版本用于浅色背景，白字版本用于深色背景。
+    """
+    rgba = Image.new("RGBA", mask.size, tuple(color) + (0,))
+    rgba.putalpha(mask)
+    return rgba
+
+
+# --------------------------------------------------------------------------- #
 #  对照表输出
 # --------------------------------------------------------------------------- #
 
@@ -411,7 +428,7 @@ def main(argv=None):
 
     is_bdf = args.font.lower().endswith(".bdf")
 
-    # --- 渲染 / 拼图集 ---
+    # --- 渲染 / 拼图集（得到的是 L 模式遮罩：255=字符，0=背景）---
     if is_bdf:
         atlas, records, rows = build_atlas_from_bdf(chars, args.font, args)
     else:
@@ -429,10 +446,12 @@ def main(argv=None):
         out_prefix.parent.mkdir(parents=True, exist_ok=True)
     base = str(out_prefix)
 
-    # --- BMP ---
-    bmp_path = Path(base + ".bmp")
-    bmp_img = atlas.convert("1") if args.bit_depth == "1" else atlas
-    bmp_img.save(bmp_path)
+    # --- PNG 字库：透明背景，黑字 / 白字各一份 ---
+    # 黑字版本给浅色背景用，白字版本给深色背景用。
+    png_black = Path(f"{base}_black.png")
+    png_white = Path(f"{base}_white.png")
+    mask_to_rgba(atlas, (0, 0, 0)).save(png_black, "PNG")
+    mask_to_rgba(atlas, (255, 255, 255)).save(png_white, "PNG")
 
     # --- 对照表 ---
     table_paths = []
@@ -445,15 +464,17 @@ def main(argv=None):
         write_xlsx(records, p)
         table_paths.append(p)
 
-    # --- 预览图 ---
+    # --- 预览图：4 倍放大，合成到白底上（透明背景在白底上看不见）---
     preview_path = None
     if args.preview:
         scale = 4
-        preview = atlas.resize(
+        big = atlas.resize(
             (atlas.width * scale, atlas.height * scale), Image.NEAREST
         )
+        canvas = Image.new("RGBA", big.size, (255, 255, 255, 255))
+        preview = Image.alpha_composite(canvas, mask_to_rgba(big, (0, 0, 0)))
         preview_path = Path(base + "_preview.png")
-        preview.save(preview_path)
+        preview.convert("RGB").save(preview_path)
 
     # --- 汇总 ---
     print(f"字符数        : {len(chars)}")
@@ -467,15 +488,14 @@ def main(argv=None):
         print(f"字体尺寸      : {actual_size}px（请求 {args.size}px）")
         print(f"上伸/下伸     : {max_ascent:.1f} / {max_descent:.1f} px")
         print(f"基线 y        : {baseline:.2f}")
-    print(f"位深          : {args.bit_depth} bit")
     print(f"ASCII 强制包含: {'是' if not args.no_ascii else '否'}")
-    print(f"字库 BMP      : {bmp_path}")
+    print(f"字库 PNG 黑字 : {png_black}  (透明背景)")
+    print(f"字库 PNG 白字 : {png_white}  (透明背景)")
     for p in table_paths:
         print(f"对照表        : {p}")
     if preview_path:
-        print(f"预览图        : {preview_path}")
+        print(f"预览图        : {preview_path}  (白底黑字，4x)")
 
 
 if __name__ == "__main__":
-    main()
-    
+    main()  

@@ -6,11 +6,30 @@ return {
         },
         {
             file = "assets/texture/player01_64x64_2026-10-02_01.png",
+        },
+        {
+            file = "assets/font/font_black.png",
+        },
+        {
+            file = "assets/font/font_white.png",
         }
     },
 
     model3d = {
 
+    },
+
+    fonts = {
+        {
+            -- 黑色字体
+            texture = 2,
+            size = 16,
+        },
+        {
+            -- 白色字体
+            texture = 3,
+            size = 16,
+        }
     },
 
     -- 输入绑定

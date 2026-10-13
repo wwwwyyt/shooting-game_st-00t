@@ -62,6 +62,7 @@ set(SOURCES
   src/main.c
   src/graphic.c
   src/input.c
+  src/text.c
 )
 #### 源码管理 ####
 

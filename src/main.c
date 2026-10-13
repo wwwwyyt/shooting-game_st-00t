@@ -16,6 +16,7 @@
 
 #include "graphic.h"
 #include "input.h"
+#include "text.h"
 
 static const char *APP_NAME = "shuguang";
 static const char *APP_VERSION = "0.1.0";
@@ -34,10 +35,12 @@ static const double dt = 0.01;
 static double currentTime;
 static double accumulator = 0.0;
 
+static lua_State *L;
+
 static int init(void)
 {
         /* 初始化 Lua 环境 */
-        lua_State *L = luaL_newstate();
+        L = luaL_newstate();
         luaL_openlibs(L);
 
         /* 加载配置文件 */
@@ -58,8 +61,9 @@ static int init(void)
         /* 初始化 INPUT 模块 */
         INPUT_Init(L);
 
-        /* 销毁 Lua 环境 */
-        lua_close(L);
+        /* 初始化 TEXT 模块 */
+        TEXT_Init(L);
+
         return 0;
 }
 
@@ -74,11 +78,10 @@ static int render(void)
         glClearColor(APP_CLEAR_COLOR_R, APP_CLEAR_COLOR_G, APP_CLEAR_COLOR_B, APP_CLEAR_COLOR_A);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        SDL_FRect srcrect = {0.0f, 0.0f, 64.0f, 64.0f};
-        if (GRAPHIC_DrawSprite(0, &srcrect, &srcrect))
-        {
-                return 1;
-        }
+        SDL_FRect textbox = {0, 0, 320, 240};
+
+        int text[] = {40, 37, 44, 44, 47};
+        TEXT_RenderText(1, sizeof text / sizeof *text, text, &textbox);
 
         /* 交换缓冲，显示渲染内容 */
         SDL_GL_SwapWindow(window);
@@ -87,6 +90,8 @@ static int render(void)
 
 static void quit(void)
 {
+        /* 销毁 Lua 环境 */
+        lua_close(L);
 }
 
 /** 该函数在启动时运行一次 */
