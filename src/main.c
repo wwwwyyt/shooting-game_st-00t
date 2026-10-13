@@ -12,11 +12,14 @@
 #include <SDL3/SDL_render.h>
 #include <SDL3/SDL_video.h>
 #include <SDL3_image/SDL_image.h>
+#include <SDL3_mixer/SDL_mixer.h>
+
 #include <stdio.h>
 
 #include "graphic.h"
 #include "input.h"
 #include "text.h"
+#include "audio.h"
 
 static const char *APP_NAME = "shuguang";
 static const char *APP_VERSION = "0.1.0";
@@ -51,18 +54,21 @@ static int init(void)
                 return 1;
         }
 
-        /* 初始化 GRAPHIC 模块 */
+        /* 初始化图形模块 */
         if (GRAPHIC_Init(L))
         {
                 return 1;
         }
         GRAPHIC_SetMode(window, MODE_2D);
 
-        /* 初始化 INPUT 模块 */
+        /* 初始化输入模块 */
         INPUT_Init(L);
 
-        /* 初始化 TEXT 模块 */
+        /* 初始化文本模块 */
         TEXT_Init(L);
+
+        /* 初始化音频模块 */
+        AUDIO_Init(L);
 
         return 0;
 }
@@ -78,11 +84,6 @@ static int render(void)
         glClearColor(APP_CLEAR_COLOR_R, APP_CLEAR_COLOR_G, APP_CLEAR_COLOR_B, APP_CLEAR_COLOR_A);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        SDL_FRect textbox = {0, 0, 320, 240};
-
-        int text[] = {40, 37, 44, 44, 47};
-        TEXT_RenderText(1, sizeof text / sizeof *text, text, &textbox);
-
         /* 交换缓冲，显示渲染内容 */
         SDL_GL_SwapWindow(window);
         return 0;
@@ -90,6 +91,9 @@ static int render(void)
 
 static void quit(void)
 {
+        /* 清理音频模块 */
+        AUDIO_Quit();
+
         /* 销毁 Lua 环境 */
         lua_close(L);
 }
@@ -103,12 +107,15 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
                            APP_IDENTIFIER);
 
         /* 初始化 SDL */
-        /* 包括: 视频子系统、手柄子系统 */
-        if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD))
+        /* 包括: 视频子系统、混音子系统、手柄子系统 */
+        if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMEPAD))
         {
                 SDL_Log("Couldn't initialize SDL: %s", SDL_GetError());
                 return SDL_APP_FAILURE;
         }
+
+        /* 初始化 SDL_mixer */
+        MIX_Init();
 
         /* 创建窗口 */
         window = SDL_CreateWindow(APP_WINDOW_TITLE,
@@ -226,6 +233,9 @@ SDL_AppResult SDL_AppIterate(void *appstate)
 /** 该函数在程序关闭时运行一次 */
 void SDL_AppQuit(void *appstate, SDL_AppResult result)
 {
+        /* 清理 SDL_mixer 的资源 */
+        MIX_Quit();
+
         /* 执行自定义退出逻辑 */
         quit();
         /* SDL 会自动销毁 window */

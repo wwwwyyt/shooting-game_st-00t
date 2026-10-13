@@ -32,6 +32,10 @@ return {
         }
     },
 
+    audios = {
+
+    },
+
     -- 输入绑定
     input = {
         {

@@ -31,8 +31,7 @@ set(
 # 查找 SDL3 及其扩展库
 find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-shared)
 find_package(SDL3_image REQUIRED)
-find_package(SDL3_mixer REQUIRED)  
-find_package(SDL3_ttf REQUIRED)
+find_package(SDL3_mixer REQUIRED)
 
 # 设置 glad 库的路径和头文件路径
 add_library(glad STATIC external/glad/src/glad.c)
@@ -63,6 +62,7 @@ set(SOURCES
   src/graphic.c
   src/input.c
   src/text.c
+  src/audio.c
 )
 #### 源码管理 ####
 
@@ -76,7 +76,6 @@ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
   SDL3::SDL3
   SDL3_image::SDL3_image
   SDL3_mixer::SDL3_mixer
-  SDL3_ttf::SDL3_ttf
   glad
   OpenGL::GL
   OpenGL::GLU

@@ -71,7 +71,7 @@ int TEXT_Init(lua_State *L)
         /* 弹出 fonts */
         lua_pop(L, 1);
 
-        return 1;
+        return 0;
 }
 
 int TEXT_RenderText(int fontIdx, int charCnt, const int *charIdxArr, SDL_FRect *textbox)
