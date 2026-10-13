@@ -9,6 +9,24 @@
 #include <lua.h>
 #include <lualib.h>
 
+typedef enum
+{
+        ACTION_UP,
+        ACTION_DOWN,
+        ACTION_LEFT,
+        ACTION_RIGHT,
+        ACTION_BTN_A,
+        ACTION_BTN_B,
+        ACTION_BTN_C,
+        ACTION_BTN_X,
+        ACTION_BTN_Y,
+        ACTION_BTN_Z,
+        ACTION_L_SHOULDER,
+        ACTION_R_SHOULDER,
+        ACTION_START,
+        ACTION_CNT
+} ActionType;
+
 void INPUT_Init(lua_State *L);
 
 /** @brief 处理键盘按下这一瞬时信号 */

@@ -25,7 +25,7 @@ add_compile_options(
 # 设置输入文件夹
 set(
   CMAKE_RUNTIME_OUTPUT_DIRECTORY
-  "${CMAKE_BINARY_DIR}/../"
+  "${CMAKE_BINARY_DIR}"
 )
 
 # 查找 SDL3 及其扩展库

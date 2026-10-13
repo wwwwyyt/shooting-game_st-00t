@@ -107,14 +107,14 @@ build CMakeFiles/shuguang.dir/src/input.c.obj: C_COMPILER__shuguang_unscanned_ C
 
 
 #############################################
-# Link the executable C:\Documents\Projects\shooting-game_st-00t\shuguang.exe
+# Link the executable shuguang.exe
 
-build C$:/Documents/Projects/shooting-game_st-00t/shuguang.exe: C_EXECUTABLE_LINKER__shuguang_ CMakeFiles/shuguang.dir/src/main.c.obj CMakeFiles/shuguang.dir/src/graphic.c.obj CMakeFiles/shuguang.dir/src/input.c.obj | C$:/msys64/ucrt64/lib/libSDL3_image.dll.a C$:/msys64/ucrt64/lib/libSDL3_mixer.dll.a C$:/msys64/ucrt64/lib/libSDL3_ttf.dll.a libglad.a C$:/msys64/ucrt64/lib/libSDL3.dll.a C$:/msys64/ucrt64/lib/liblua5.4.dll.a || libglad.a
+build shuguang.exe: C_EXECUTABLE_LINKER__shuguang_ CMakeFiles/shuguang.dir/src/main.c.obj CMakeFiles/shuguang.dir/src/graphic.c.obj CMakeFiles/shuguang.dir/src/input.c.obj | C$:/msys64/ucrt64/lib/libSDL3_image.dll.a C$:/msys64/ucrt64/lib/libSDL3_mixer.dll.a C$:/msys64/ucrt64/lib/libSDL3_ttf.dll.a libglad.a C$:/msys64/ucrt64/lib/libSDL3.dll.a C$:/msys64/ucrt64/lib/liblua5.4.dll.a || libglad.a
   LINK_LIBRARIES = C:/msys64/ucrt64/lib/libSDL3_image.dll.a  C:/msys64/ucrt64/lib/libSDL3_mixer.dll.a  C:/msys64/ucrt64/lib/libSDL3_ttf.dll.a  libglad.a  -lopengl32  -lglu32  C:/msys64/ucrt64/lib/libSDL3.dll.a  -lopengl32  C:/msys64/ucrt64/lib/liblua5.4.dll.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\shuguang.dir
   POST_BUILD = cd .
   PRE_LINK = cd .
-  TARGET_FILE = C:\Documents\Projects\shooting-game_st-00t\shuguang.exe
+  TARGET_FILE = shuguang.exe
   TARGET_IMPLIB = libshuguang.dll.a
   TARGET_PDB = shuguang.exe.dbg
   TARGET_SUPPORT_DIR = CMakeFiles\shuguang.dir
@@ -148,9 +148,7 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 
 build glad: phony libglad.a
 
-build shuguang: phony C$:/Documents/Projects/shooting-game_st-00t/shuguang.exe
-
-build shuguang.exe: phony C$:/Documents/Projects/shooting-game_st-00t/shuguang.exe
+build shuguang: phony shuguang.exe
 
 # =============================================================================
 # Folder targets.
@@ -160,7 +158,7 @@ build shuguang.exe: phony C$:/Documents/Projects/shooting-game_st-00t/shuguang.e
 #############################################
 # Folder: C:/Documents/Projects/shooting-game_st-00t/build
 
-build all: phony libglad.a C$:/Documents/Projects/shooting-game_st-00t/shuguang.exe
+build all: phony libglad.a shuguang.exe
 
 # =============================================================================
 # Built-in targets

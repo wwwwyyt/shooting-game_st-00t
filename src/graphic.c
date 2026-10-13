@@ -143,15 +143,72 @@ void GRAPHIC_SetMode(SDL_Window *window, GraphicMode mode)
         }
 }
 
-void GRAPHIC_DrawSprite(int idx, float x, float y, float w, float h)
+void GRAPHIC_DrawSprite(int idx, SDL_FRect *srcrect, SDL_FRect *dstrect)
 {
-        glBindTexture(GL_TEXTURE_2D, textures.data[idx].id);
+        Texture *tex = NULL;
+        if (idx >= 0 && idx < textures.size)
+        {
+                tex = &textures.data[idx];
+        }
+        else
+        {
+                SDL_Log("Texture index out of bounds\n");
+                return;
+        }
+
+        /* 解析源矩形 */
+        float sx, sy, sw, sh;
+        if (srcrect)
+        {
+                sx = srcrect->x;
+                sy = srcrect->y;
+                sw = srcrect->w;
+                sh = srcrect->h;
+        }
+        else
+        {
+                sx = 0.0f;
+                sy = 0.0f;
+                sw = (float)tex->width;
+                sh = (float)tex->height;
+        }
+        /* 将源矩形转换为归一化的纹理坐标 */
+        float u0 = sx / (float)tex->width;
+        float v0 = sy / (float)tex->height;
+        float u1 = (sx + sw) / (float)tex->width;
+        float v1 = (sy + sh) / (float)tex->height;
+
+        /* 解析目标矩形 */
+        float dx, dy, dw, dh;
+        if (dstrect)
+        {
+                dx = dstrect->x;
+                dy = dstrect->y;
+                dw = dstrect->w;
+                dh = dstrect->h;
+        }
+        else
+        {
+                dx = 0.0f;
+                dy = 0.0f;
+                dw = (float)LOGICAL_WIDTH;
+                dh = (float)LOGICAL_HEIGHT;
+        }
+
+        glBindTexture(GL_TEXTURE_2D, tex->id);
 
         /* 模型视图矩阵: 平移到 (x,y)，缩放到 (w,h) */
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-        glTranslatef(x, y, 0);
-        glScalef(w, h, 1);
+        glTranslatef(dx, dy, 0);
+        glScalef(dw, dh, 1);
+
+        /* 纹理矩阵 */
+        glMatrixMode(GL_TEXTURE);
+        glLoadIdentity();
+        glTranslatef(u0, v0, 0.0f);
+        glScalef(u1 - u0, v1 - v0, 1.0f);
+        glMatrixMode(GL_MODELVIEW);
 
         /* 绑定 VBO */
         glBindBuffer(GL_ARRAY_BUFFER, spriteVBO);
@@ -162,10 +219,8 @@ void GRAPHIC_DrawSprite(int idx, float x, float y, float w, float h)
 
         /* 设置指针 */
         /* 步长 = 4 个 float（位置 2 + 纹理 2） */
-        glVertexPointer(2, GL_FLOAT, 4 * sizeof(float),
-                        (void *)0); // 位置偏移 0
-        glTexCoordPointer(2, GL_FLOAT, 4 * sizeof(float),
-                          (void *)(2 * sizeof(float))); // 纹理偏移 2 个 float
+        glVertexPointer(2, GL_FLOAT, 4 * sizeof(float), (void *)0);                     // 位置偏移 0
+        glTexCoordPointer(2, GL_FLOAT, 4 * sizeof(float), (void *)(2 * sizeof(float))); // 纹理偏移 2 个 float
 
         /* 一次绘制 4 个顶点 */
         glDrawArrays(GL_QUADS, 0, 4);
@@ -174,6 +229,11 @@ void GRAPHIC_DrawSprite(int idx, float x, float y, float w, float h)
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glDisableClientState(GL_VERTEX_ARRAY);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        /* 复位纹理矩阵 */
+        glMatrixMode(GL_TEXTURE);
+        glLoadIdentity();
+        glMatrixMode(GL_MODELVIEW);
 }
 
 Texture GRAPHIC_LoadTexture(const char *path)
@@ -215,4 +275,20 @@ Texture GRAPHIC_LoadTexture(const char *path)
 
         SDL_DestroySurface(converted);
         return tex;
+}
+
+int GRAPHIC_GetTextureSize(int idx, int *width, int *height)
+{
+        if (idx >= 0 && idx < textures.size)
+        {
+                *width = textures.data[idx].width;
+                *height = textures.data[idx].height;
+                return 0;
+        }
+        else
+        {
+                *width = *height = 0;
+                SDL_SetError("Texture index out of bounds\n");
+                return 1;
+        }
 }

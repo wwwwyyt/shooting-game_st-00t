@@ -16,32 +16,52 @@ return {
     -- 输入绑定
     input = {
         {
+            player = 0,
             key = "i",
-            signal = "up"
+            action = "up",
+            trigger = "hold"
         },
         {
+            player = 0,
             key = "k",
-            signal = "down"
+            action = "down",
+            trigger = "hold"
         },
         {
+            player = 0,
             key = "j",
-            signal = "left"
+            action = "left",
+            trigger = "hold"
         },
         {
+            player = 0,
             key = "l",
-            signal = "right"
+            action = "right",
+            trigger = "hold"
         },
         {
+            player = 0,
             key = "z",
-            signal = "attack"
+            action = "a",
+            trigger = "hold"
         },
         {
+            player = 0,
             key = "x",
-            signal = "boom"
+            action = "b",
+            trigger = "hold"
         },
         {
+            player = 0,
             key = "shift",
-            signal = "switch"
-        }
+            action = "c",
+            trigger = "hold"
+        },
+        {
+            player = 0,
+            key = "enter",
+            action = "start",
+            trigger = "press"
+        },
     }
 }

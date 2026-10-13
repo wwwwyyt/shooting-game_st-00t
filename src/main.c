@@ -34,12 +34,10 @@ static const double dt = 0.01;
 static double currentTime;
 static double accumulator = 0.0;
 
-static lua_State *L;
-
 static void init(void)
 {
         /* 初始化 Lua 环境 */
-        L = luaL_newstate();
+        lua_State *L = luaL_newstate();
         luaL_openlibs(L);
 
         /* 加载配置文件 */
@@ -56,6 +54,9 @@ static void init(void)
 
         /* 初始化 INPUT 模块 */
         INPUT_Init(L);
+
+        /* 销毁 Lua 环境 */
+        lua_close(L);
 }
 
 static void update(double time, const double dt)
@@ -68,7 +69,8 @@ static void render(void)
         glClearColor(APP_CLEAR_COLOR_R, APP_CLEAR_COLOR_G, APP_CLEAR_COLOR_B, APP_CLEAR_COLOR_A);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        GRAPHIC_DrawSprite(0, 0, 0, 640, 480);
+        SDL_FRect srcrect = {0.0f, 0.0f, 64.0f, 64.0f};
+        GRAPHIC_DrawSprite(0, &srcrect, &srcrect);
 
         /* 交换缓冲，显示渲染内容 */
         SDL_GL_SwapWindow(window);
@@ -76,8 +78,6 @@ static void render(void)
 
 static void quit(void)
 {
-        /* 销毁 Lua 环境 */
-        lua_close(L);
 }
 
 /** 该函数在启动时运行一次 */
