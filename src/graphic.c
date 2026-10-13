@@ -55,7 +55,7 @@ static void initQuadVBO(void)
  *
  * 在 GRAPHIC 开头的其他函数调用之前调用
  */
-void GRAPHIC_Init(lua_State *L)
+int GRAPHIC_Init(lua_State *L)
 {
         /* 加载配置 */
         lua_getfield(L, -1, "textures");
@@ -63,7 +63,7 @@ void GRAPHIC_Init(lua_State *L)
         {
                 SDL_Log("Field 'textures' is not a table\n");
                 lua_close(L);
-                return;
+                return 1;
         }
         lua_Integer n = luaL_len(L, -1);
         textures.size = n;
@@ -75,7 +75,10 @@ void GRAPHIC_Init(lua_State *L)
                 /* 读取 file */
                 lua_getfield(L, -1, "file");
                 const char *file = lua_tostring(L, -1);
-                textures.data[i - 1] = GRAPHIC_LoadTexture(file);
+                if (GRAPHIC_LoadTexture(file, &(textures.data[i - 1])))
+                {
+                        return 1;
+                }
 
                 lua_pop(L, 1);
 
@@ -87,6 +90,8 @@ void GRAPHIC_Init(lua_State *L)
 
         /* 初始化 VBO */
         initQuadVBO();
+
+        return 0;
 }
 
 void GRAPHIC_SetMode(SDL_Window *window, GraphicMode mode)
@@ -143,7 +148,7 @@ void GRAPHIC_SetMode(SDL_Window *window, GraphicMode mode)
         }
 }
 
-void GRAPHIC_DrawSprite(int idx, SDL_FRect *srcrect, SDL_FRect *dstrect)
+int GRAPHIC_DrawSprite(int idx, SDL_FRect *srcrect, SDL_FRect *dstrect)
 {
         Texture *tex = NULL;
         if (idx >= 0 && idx < textures.size)
@@ -153,7 +158,7 @@ void GRAPHIC_DrawSprite(int idx, SDL_FRect *srcrect, SDL_FRect *dstrect)
         else
         {
                 SDL_Log("Texture index out of bounds\n");
-                return;
+                return 1;
         }
 
         /* 解析源矩形 */
@@ -234,9 +239,11 @@ void GRAPHIC_DrawSprite(int idx, SDL_FRect *srcrect, SDL_FRect *dstrect)
         glMatrixMode(GL_TEXTURE);
         glLoadIdentity();
         glMatrixMode(GL_MODELVIEW);
+
+        return 0;
 }
 
-Texture GRAPHIC_LoadTexture(const char *path)
+int GRAPHIC_LoadTexture(const char *path, Texture *texture)
 {
         Texture tex = {0, 0, 0};
 
@@ -244,7 +251,7 @@ Texture GRAPHIC_LoadTexture(const char *path)
         if (!surface)
         {
                 SDL_Log("Load texture failed: %s\n", SDL_GetError());
-                return tex;
+                return 1;
         }
 
         SDL_Surface *converted = SDL_ConvertSurface(surface, SDL_PIXELFORMAT_ABGR8888);
@@ -252,7 +259,7 @@ Texture GRAPHIC_LoadTexture(const char *path)
         if (!converted)
         {
                 SDL_Log("Load texture failed: %s\n", SDL_GetError());
-                return tex;
+                return 1;
         }
 
         tex.width = converted->w;
@@ -274,7 +281,8 @@ Texture GRAPHIC_LoadTexture(const char *path)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); /* 纹理环绕时垂直方向以边缘色重复 */
 
         SDL_DestroySurface(converted);
-        return tex;
+        *texture = tex;
+        return 0;
 }
 
 int GRAPHIC_GetTextureSize(int idx, int *width, int *height)

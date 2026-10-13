@@ -34,7 +34,7 @@ static const double dt = 0.01;
 static double currentTime;
 static double accumulator = 0.0;
 
-static void init(void)
+static int init(void)
 {
         /* 初始化 Lua 环境 */
         lua_State *L = luaL_newstate();
@@ -45,11 +45,14 @@ static void init(void)
         {
                 SDL_Log("Couldn't load lua config: %s\n", lua_tostring(L, -1));
                 lua_close(L);
-                return;
+                return 1;
         }
 
         /* 初始化 GRAPHIC 模块 */
-        GRAPHIC_Init(L);
+        if (GRAPHIC_Init(L))
+        {
+                return 1;
+        }
         GRAPHIC_SetMode(window, MODE_2D);
 
         /* 初始化 INPUT 模块 */
@@ -57,23 +60,29 @@ static void init(void)
 
         /* 销毁 Lua 环境 */
         lua_close(L);
+        return 0;
 }
 
-static void update(double time, const double dt)
+static int update(double time, const double dt)
 {
+        return 0;
 }
 
-static void render(void)
+static int render(void)
 {
         /* 清屏 */
         glClearColor(APP_CLEAR_COLOR_R, APP_CLEAR_COLOR_G, APP_CLEAR_COLOR_B, APP_CLEAR_COLOR_A);
         glClear(GL_COLOR_BUFFER_BIT);
 
         SDL_FRect srcrect = {0.0f, 0.0f, 64.0f, 64.0f};
-        GRAPHIC_DrawSprite(0, &srcrect, &srcrect);
+        if (GRAPHIC_DrawSprite(0, &srcrect, &srcrect))
+        {
+                return 1;
+        }
 
         /* 交换缓冲，显示渲染内容 */
         SDL_GL_SwapWindow(window);
+        return 0;
 }
 
 static void quit(void)
@@ -139,7 +148,10 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
         currentTime = SDL_GetTicksNS() / 1e9;
 
         /* 执行自定义初始化逻辑 */
-        init();
+        if (init())
+        {
+                return SDL_APP_FAILURE;
+        }
 
         /* 程序继续 */
         return SDL_APP_CONTINUE;
@@ -188,13 +200,19 @@ SDL_AppResult SDL_AppIterate(void *appstate)
         accumulator += frameTime;
         while (accumulator >= dt)
         {
-                update(time, dt);
+                if (update(time, dt))
+                {
+                        return SDL_APP_FAILURE;
+                }
                 accumulator -= dt;
                 time += dt;
         }
 
         /* 执行自定义渲染逻辑 */
-        render();
+        if (render())
+        {
+                return SDL_APP_FAILURE;
+        }
 
         /* 程序继续 */
         return SDL_APP_CONTINUE;

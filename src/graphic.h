@@ -37,10 +37,10 @@ typedef struct
         size_t size;
 } TextureArray;
 
-void GRAPHIC_Init(lua_State *L);
+int GRAPHIC_Init(lua_State *L);
 void GRAPHIC_SetMode(SDL_Window *window, GraphicMode mode);
-void GRAPHIC_DrawSprite(int idx, SDL_FRect *srcrect, SDL_FRect *dstrect);
-Texture GRAPHIC_LoadTexture(const char *path);
+int GRAPHIC_DrawSprite(int idx, SDL_FRect *srcrect, SDL_FRect *dstrect);
+int GRAPHIC_LoadTexture(const char *path, Texture *texture);
 int GRAPHIC_GetTextureSize(int idx, int *width, int *height);
 
 #endif /* GRAPHIC_H */
