@@ -43,7 +43,7 @@ int TEXT_Init(lua_State *L)
         lua_getfield(L, -1, "fonts");
         if (!lua_istable(L, -1))
         {
-                SDL_Log("Field 'textures' is not a table\n");
+                SDL_Log("Field 'fonts' is not a table\n");
                 lua_close(L);
                 return 1;
         }
