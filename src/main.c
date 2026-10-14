@@ -33,10 +33,10 @@ static const GLfloat APP_CLEAR_COLOR_B = 0.1f;
 static const GLfloat APP_CLEAR_COLOR_A = 1.0f;
 
 static SDL_Window *window;
-static double time = 0.0;
-static const double dt = 0.01;
-static double currentTime;
-static double accumulator = 0.0;
+static Uint64 timeNS = 0;
+static const Uint64 dtNS = 1e7;
+static Uint64 currentTimeNS;
+static Uint64 accumulatorNS = 0;
 
 static lua_State *L;
 
@@ -73,8 +73,20 @@ static int init(void)
         return 0;
 }
 
-static int update(double time, const double dt)
+static int update(Uint64 timeNS, const Uint64 dtNS)
 {
+        printf("%lf\n", timeNS / (1.0f * 1e9));
+        if (timeNS == 1e9)
+        {
+                AUDIO_PlayTone(WAVE_SINE, 440.0f, 3.0f, 0.5f);
+        }
+        if (timeNS == 2e9)
+        {
+                AUDIO_PlayTone(WAVE_SINE, 540.0f, 3.0f, 0.5f);
+        }
+
+        AUDIO_BreakStream();
+
         return 0;
 }
 
@@ -156,8 +168,8 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
                 SDL_GL_SetSwapInterval(0);
         }
 
-        /* 设置 currentTime 初值 */
-        currentTime = SDL_GetTicksNS() / 1e9;
+        /* 设置 currentTimeNS 初值 */
+        currentTimeNS = SDL_GetTicksNS() / 1e9;
 
         /* 执行自定义初始化逻辑 */
         if (init())
@@ -206,18 +218,18 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
 SDL_AppResult SDL_AppIterate(void *appstate)
 {
         /* 使用累加器解耦模拟与渲染 */
-        double newTime = SDL_GetTicksNS() / 1e9;
-        double frameTime = newTime - currentTime;
-        currentTime = newTime;
-        accumulator += frameTime;
-        while (accumulator >= dt)
+        Uint64 newTime = SDL_GetTicksNS();
+        Uint64 frameTime = newTime - currentTimeNS;
+        currentTimeNS = newTime;
+        accumulatorNS += frameTime;
+        while (accumulatorNS >= dtNS)
         {
-                if (update(time, dt))
+                if (update(timeNS, dtNS))
                 {
                         return SDL_APP_FAILURE;
                 }
-                accumulator -= dt;
-                time += dt;
+                accumulatorNS -= dtNS;
+                timeNS += dtNS;
         }
 
         /* 执行自定义渲染逻辑 */

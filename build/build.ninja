@@ -117,6 +117,14 @@ build CMakeFiles/shuguang.dir/src/audio.c.obj: C_COMPILER__shuguang_unscanned_ C
   OBJECT_FILE_DIR = CMakeFiles\shuguang.dir\src
   TARGET_SUPPORT_DIR = CMakeFiles\shuguang.dir
 
+build CMakeFiles/shuguang.dir/src/queue.c.obj: C_COMPILER__shuguang_unscanned_ C$:/Documents/Projects/shooting-game_st-00t/src/queue.c || cmake_object_order_depends_target_shuguang
+  DEP_FILE = CMakeFiles\shuguang.dir\src\queue.c.obj.d
+  FLAGS = -std=gnu11 -Wall -Werror -Werror=maybe-uninitialized -Warray-bounds -Wstrict-prototypes -g
+  INCLUDES = -IC:/Documents/Projects/shooting-game_st-00t/external/glad/include -isystem C:/msys64/ucrt64/include/lua5.4
+  OBJECT_DIR = CMakeFiles\shuguang.dir
+  OBJECT_FILE_DIR = CMakeFiles\shuguang.dir\src
+  TARGET_SUPPORT_DIR = CMakeFiles\shuguang.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target shuguang
@@ -125,7 +133,7 @@ build CMakeFiles/shuguang.dir/src/audio.c.obj: C_COMPILER__shuguang_unscanned_ C
 #############################################
 # Link the executable shuguang.exe
 
-build shuguang.exe: C_EXECUTABLE_LINKER__shuguang_ CMakeFiles/shuguang.dir/src/main.c.obj CMakeFiles/shuguang.dir/src/graphic.c.obj CMakeFiles/shuguang.dir/src/input.c.obj CMakeFiles/shuguang.dir/src/text.c.obj CMakeFiles/shuguang.dir/src/audio.c.obj | C$:/msys64/ucrt64/lib/libSDL3_image.dll.a C$:/msys64/ucrt64/lib/libSDL3_mixer.dll.a libglad.a C$:/msys64/ucrt64/lib/libSDL3.dll.a C$:/msys64/ucrt64/lib/liblua5.4.dll.a || libglad.a
+build shuguang.exe: C_EXECUTABLE_LINKER__shuguang_ CMakeFiles/shuguang.dir/src/main.c.obj CMakeFiles/shuguang.dir/src/graphic.c.obj CMakeFiles/shuguang.dir/src/input.c.obj CMakeFiles/shuguang.dir/src/text.c.obj CMakeFiles/shuguang.dir/src/audio.c.obj CMakeFiles/shuguang.dir/src/queue.c.obj | C$:/msys64/ucrt64/lib/libSDL3_image.dll.a C$:/msys64/ucrt64/lib/libSDL3_mixer.dll.a libglad.a C$:/msys64/ucrt64/lib/libSDL3.dll.a C$:/msys64/ucrt64/lib/liblua5.4.dll.a || libglad.a
   LINK_LIBRARIES = C:/msys64/ucrt64/lib/libSDL3_image.dll.a  C:/msys64/ucrt64/lib/libSDL3_mixer.dll.a  libglad.a  -lopengl32  -lglu32  C:/msys64/ucrt64/lib/libSDL3.dll.a  -lopengl32  C:/msys64/ucrt64/lib/liblua5.4.dll.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\shuguang.dir
   POST_BUILD = cd .

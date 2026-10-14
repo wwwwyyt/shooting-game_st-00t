@@ -1,5 +1,5 @@
-#ifndef INPUT_H
-#define INPUT_H
+#ifndef SG_INPUT_H
+#define SG_INPUT_H
 
 #include <SDL3/SDL_events.h>
 #include <SDL3/SDL_scancode.h>
@@ -47,4 +47,4 @@ void INPUT_DoKeyPressing(void);
 /** @brief 处理手柄按键按住这一连续信号 */
 void INPUT_DoGamePadBtnPressing(void);
 
-#endif /* INPUT_H */
+#endif /* SG_INPUT_H */

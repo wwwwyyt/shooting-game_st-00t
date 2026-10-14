@@ -63,6 +63,7 @@ set(SOURCES
   src/input.c
   src/text.c
   src/audio.c
+  src/queue.c
 )
 #### 源码管理 ####
 

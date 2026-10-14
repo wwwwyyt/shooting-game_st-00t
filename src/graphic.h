@@ -1,5 +1,5 @@
-#ifndef GRAPHIC_H
-#define GRAPHIC_H
+#ifndef SG_GRAPHIC_H
+#define SG_GRAPHIC_H
 
 #ifdef _WIN32
 #include <windows.h>
@@ -43,4 +43,4 @@ int GRAPHIC_DrawSprite(int idx, SDL_FRect *srcrect, SDL_FRect *dstrect);
 int GRAPHIC_LoadTexture(const char *path, Texture *texture);
 int GRAPHIC_GetTextureSize(int idx, int *width, int *height);
 
-#endif /* GRAPHIC_H */
+#endif /* SG_GRAPHIC_H */
