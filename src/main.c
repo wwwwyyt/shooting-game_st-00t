@@ -75,14 +75,13 @@ static int init(void)
 
 static int update(Uint64 timeNS, const Uint64 dtNS)
 {
-        printf("%lf\n", timeNS / (1.0f * 1e9));
         if (timeNS == 1e9)
         {
-                AUDIO_PlayTone(WAVE_SINE, 440.0f, 3.0f, 0.5f);
+                AUDIO_PlayNoise(NOISE_PINK, 3.0f, 0.1f);
         }
         if (timeNS == 2e9)
         {
-                AUDIO_PlayTone(WAVE_SINE, 540.0f, 3.0f, 0.5f);
+                AUDIO_PlayTone(WAVE_SINE, 540.0f, 3.0f, 0.1f);
         }
 
         AUDIO_BreakStream();

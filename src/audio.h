@@ -33,7 +33,16 @@ typedef enum
 {
         /** @brief 白噪声 */
         NOISE_WHITE,
+
+        /** @brief 粉红噪声 */
+        NOISE_PINK,
 } NoiseType;
+
+/** @brief 粉红噪声的状态 */
+typedef struct
+{
+        float b0, b1, b2, b3, b4, b5, b6;
+} PinkState;
 
 int AUDIO_Init(lua_State *L);
 void AUDIO_PlayAudio(int audioIdx);
@@ -48,7 +57,7 @@ void AUDIO_PlayAudio(int audioIdx);
 void AUDIO_PlayTone(WaveType type, float freq, float duration, float amplitude);
 
 /** @brief 用于播放噪声 */
-void AUDIO_PlayNoise(NoiseType type);
+void AUDIO_PlayNoise(NoiseType type, float duration, float amplitude);
 
 /** @brief 用于打断队列中最旧的音频
  *

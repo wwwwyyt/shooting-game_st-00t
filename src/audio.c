@@ -35,6 +35,19 @@ static float generateWave(WaveType type, float freq, float t)
         }
 }
 
+static float pinkNoise(PinkState *s, float white)
+{
+        s->b0 = 0.99886f * s->b0 + white * 0.0555179f;
+        s->b1 = 0.99332f * s->b1 + white * 0.0750759f;
+        s->b2 = 0.96900f * s->b2 + white * 0.1538520f;
+        s->b3 = 0.86650f * s->b3 + white * 0.3104856f;
+        s->b4 = 0.55000f * s->b4 + white * 0.5329522f;
+        s->b5 = -0.7616f * s->b5 - white * 0.0168980f;
+        float pink = s->b0 + s->b1 + s->b2 + s->b3 + s->b4 + s->b5 + s->b6 + white * 0.5362f;
+        s->b6 = white * 0.115926f;
+        return pink * 0.11f; // 缩放，避免过大
+}
+
 int AUDIO_Init(lua_State *L)
 {
         /* 创建默认音频设备混音器 */
@@ -130,6 +143,63 @@ void AUDIO_PlayTone(WaveType type, float freq, float duration, float amplitude)
                 SDL_DestroyAudioStream(oldestStream);
         }
         QUE_Push(&streamQueue, toneStream);
+}
+
+void AUDIO_PlayNoise(NoiseType type, float duration, float amplitude)
+{
+        SDL_AudioSpec spec = {SDL_AUDIO_F32, 1, 44100};
+        SDL_AudioStream *stream = SDL_OpenAudioDeviceStream(
+            SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &spec, NULL, NULL);
+        if (!stream)
+                return;
+
+        int num_samples = (int)(spec.freq * duration);
+        float *buffer = SDL_malloc(num_samples * sizeof(float));
+        if (!buffer)
+        {
+                SDL_DestroyAudioStream(stream);
+                return;
+        }
+
+        PinkState pink = {0};
+        float attack = 0.005f, release = 0.005f;
+
+        for (int i = 0; i < num_samples; i++)
+        {
+                float t = (float)i / spec.freq;
+                float white = SDL_randf() * 2.0f - 1.0f; // [-1, 1]
+                float value;
+
+                if (type == NOISE_WHITE)
+                {
+                        value = white;
+                }
+                else
+                {
+                        value = pinkNoise(&pink, white);
+                }
+
+                // 包络
+                float env = 1.0f;
+                if (t < attack)
+                        env = t / attack;
+                else if (t > duration - release)
+                        env = (duration - t) / release;
+
+                buffer[i] = value * env * amplitude;
+        }
+
+        SDL_PutAudioStreamData(stream, buffer, num_samples * sizeof(float));
+        SDL_ResumeAudioStreamDevice(stream);
+        SDL_free(buffer);
+
+        /* 将音频流压入队列 */
+        if (QUE_IsFull(&streamQueue))
+        {
+                SDL_AudioStream *oldestStream = QUE_Pop(&streamQueue);
+                SDL_DestroyAudioStream(oldestStream);
+        }
+        QUE_Push(&streamQueue, stream);
 }
 
 void AUDIO_BreakStream(void)
