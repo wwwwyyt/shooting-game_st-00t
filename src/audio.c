@@ -6,10 +6,43 @@ static int audioCnt;
 static const int STREAM_QUEUE_SIZE = 16;
 static Queue streamQueue;
 
+/* 预设：小而脆的爆炸 */
+static const ExplosionParams EXPLOSION_SMALL = {
+    .decay_rate = 10.0f,
+    .initial_cutoff = 0.7f,
+    .final_cutoff = 0.05f,
+    .boom_freq = 80.0f,
+    .boom_amount = 0.25f,
+    .noise_gain = 2.0f,
+    .peak = 0.9f,
+};
+
+/* 预设：大而沉的爆炸 */
+static const ExplosionParams EXPLOSION_LARGE = {
+    .decay_rate = 4.0f,
+    .initial_cutoff = 0.4f,
+    .final_cutoff = 0.01f,
+    .boom_freq = 50.0f,
+    .boom_amount = 0.5f,
+    .noise_gain = 2.5f,
+    .peak = 0.95f,
+};
+
+/* 预设：枪声 */
+static const ExplosionParams EXPLOSION_SHOOT = {
+    .decay_rate = 18.0f,
+    .initial_cutoff = 0.2f,
+    .final_cutoff = 0.3f,
+    .boom_freq = 120.0f,
+    .boom_amount = 0.15f,
+    .noise_gain = 2.5f,
+    .peak = 0.95f,
+};
+
 static int loadAudio(const char *path, MIX_Audio **audio)
 {
         *audio = MIX_LoadAudio(mixer, path, true);
-        if (*audio)
+        if (!*audio)
         {
                 SDL_Log("Failed to load audio: %s", SDL_GetError());
                 return 1;
@@ -35,6 +68,7 @@ static float generateWave(WaveType type, float freq, float t)
         }
 }
 
+/** @brief 使用 Paul Kellet 算法生成粉红噪声 */
 static float pinkNoise(PinkState *s, float white)
 {
         s->b0 = 0.99886f * s->b0 + white * 0.0555179f;
@@ -46,6 +80,127 @@ static float pinkNoise(PinkState *s, float white)
         float pink = s->b0 + s->b1 + s->b2 + s->b3 + s->b4 + s->b5 + s->b6 + white * 0.5362f;
         s->b6 = white * 0.115926f;
         return pink * 0.11f; // 缩放，避免过大
+}
+
+/** @brief 一阶低通滤波
+ *
+ *  @param cutoff 0.0~1.0，越小越低沉
+ */
+static inline float lowpass1(LowPass1 *lp, float input, float cutoff)
+{
+        lp->y += cutoff * (input - lp->y);
+        return lp->y;
+}
+
+/** @brief 归一化到指定峰值 */
+static void normalize(float *buf, int n, float target_peak)
+{
+        float peak = 0.0f;
+        for (int i = 0; i < n; i++)
+        {
+                float a = fabsf(buf[i]);
+                if (a > peak)
+                        peak = a;
+        }
+        if (peak > 1e-6f)
+        {
+                float scale = target_peak / peak;
+                for (int i = 0; i < n; i++)
+                        buf[i] *= scale;
+        }
+}
+
+/** @brief 就地填充爆炸样本 */
+static void generateExplosionSamples(float *buf, int n, int sample_rate,
+                                     const ExplosionParams *p)
+{
+        LowPass1 lp = {0};
+        float inv_sr = 1.0f / (float)sample_rate;
+
+        /* 淡入时长：枪声/爆炸用 2ms 左右即可，够消爆音又不影响"啪"的干脆感 */
+        const float attack = 0.002f;
+
+        for (int i = 0; i < n; i++)
+        {
+                float t = (float)i * inv_sr;
+                float progress = (float)i / (float)n; // 0~1
+
+                // 1. 白噪声
+                float white = SDL_randf() * 2.0f - 1.0f;
+
+                // 2. 低通扫频：从 initial_cutoff 扫到 final_cutoff
+                float cutoff = p->initial_cutoff +
+                               (p->final_cutoff - p->initial_cutoff) * progress;
+                float filtered = lowpass1(&lp, white, cutoff);
+
+                // 3. 指数衰减包络
+                float env = expf(-p->decay_rate * t);
+
+                // 4. 低频冲击
+                float boom = sinf(2.0f * SDL_PI_F * p->boom_freq * t) * expf(-p->decay_rate * 2.0f * t);
+
+                // 5. 线性淡入，消除开头直流阶跃造成的爆音
+                float fade_in = (t < attack) ? (t / attack) : 1.0f;
+
+                // 混合（淡入乘在最后）
+                buf[i] = (filtered * p->noise_gain + boom * p->boom_amount) * env * fade_in;
+        }
+
+        normalize(buf, n, p->peak);
+}
+
+/** @brief 生成噪声 PCM
+ *
+ * 调用者负责 SDL_free
+ *
+ * @param out_count 返回样本数
+ */
+float *generateNoise(NoiseType type, float duration, int sample_rate,
+                     int *out_count)
+{
+        int n = (int)(duration * (float)sample_rate);
+        if (n <= 0)
+        {
+                *out_count = 0;
+                return NULL;
+        }
+
+        float *buf = SDL_malloc((size_t)n * sizeof(float));
+        if (!buf)
+        {
+                *out_count = 0;
+                return NULL;
+        }
+        *out_count = n;
+
+        switch (type)
+        {
+        case NOISE_WHITE:
+                for (int i = 0; i < n; i++)
+                        buf[i] = (SDL_randf() * 2.0f - 1.0f) * 0.5f;
+                break;
+
+        case NOISE_PINK:
+        {
+                PinkState ps = {0};
+                for (int i = 0; i < n; i++)
+                        buf[i] = pinkNoise(&ps, SDL_randf() * 2.0f - 1.0f) * 3.0f;
+                normalize(buf, n, 0.7f);
+                break;
+        }
+
+        case NOISE_EXPLOSION_SMALL:
+                generateExplosionSamples(buf, n, sample_rate, &EXPLOSION_SMALL);
+                break;
+
+        case NOISE_EXPLOSION_LARGE:
+                generateExplosionSamples(buf, n, sample_rate, &EXPLOSION_LARGE);
+                break;
+        case NOISE_EXPLOSION_SHOOT:
+                generateExplosionSamples(buf, n, sample_rate, &EXPLOSION_SHOOT);
+                break;
+        }
+        return buf;
 }
 
 int AUDIO_Init(lua_State *L)
@@ -153,47 +308,24 @@ void AUDIO_PlayNoise(NoiseType type, float duration, float amplitude)
         if (!stream)
                 return;
 
-        int num_samples = (int)(spec.freq * duration);
-        float *buffer = SDL_malloc(num_samples * sizeof(float));
-        if (!buffer)
+        int num_samples = 0;
+        float *buffer = generateNoise(type, duration, spec.freq, &num_samples);
+        if (!buffer || num_samples <= 0)
         {
                 SDL_DestroyAudioStream(stream);
+                SDL_free(buffer);
                 return;
         }
 
-        PinkState pink = {0};
-        float attack = 0.005f, release = 0.005f;
-
+        /* 应用整体音量（爆炸预设已归一化到 0.9/0.95，注意 amplitude 别超过 1） */
         for (int i = 0; i < num_samples; i++)
-        {
-                float t = (float)i / spec.freq;
-                float white = SDL_randf() * 2.0f - 1.0f; // [-1, 1]
-                float value;
-
-                if (type == NOISE_WHITE)
-                {
-                        value = white;
-                }
-                else
-                {
-                        value = pinkNoise(&pink, white);
-                }
-
-                // 包络
-                float env = 1.0f;
-                if (t < attack)
-                        env = t / attack;
-                else if (t > duration - release)
-                        env = (duration - t) / release;
-
-                buffer[i] = value * env * amplitude;
-        }
+                buffer[i] *= amplitude;
 
         SDL_PutAudioStreamData(stream, buffer, num_samples * sizeof(float));
         SDL_ResumeAudioStreamDevice(stream);
-        SDL_free(buffer);
+        SDL_free(buffer); /* Put 会复制数据，这里可以立即释放 */
 
-        /* 将音频流压入队列 */
+        /* 将音频流压入队列，满了就打断最旧的流 */
         if (QUE_IsFull(&streamQueue))
         {
                 SDL_AudioStream *oldestStream = QUE_Pop(&streamQueue);
@@ -204,19 +336,14 @@ void AUDIO_PlayNoise(NoiseType type, float duration, float amplitude)
 
 void AUDIO_BreakStream(void)
 {
-        /* 销毁位于队列末尾的已经播放完的音频流 */
-        SDL_AudioStream *stream = QUE_Tail(&streamQueue);
-        if (stream && SDL_GetAudioStreamQueued(stream) == 0)
+        /* 回收所有播放完毕的流 */
+        while (!QUE_IsEmpty(&streamQueue))
         {
+                SDL_AudioStream *stream = QUE_Tail(&streamQueue);
+                if (!stream || SDL_GetAudioStreamQueued(stream) != 0)
+                        break;
+                QUE_Pop(&streamQueue);
                 SDL_DestroyAudioStream(stream);
-                stream = NULL;
-                QUE_Pop(&streamQueue);
-        }
-
-        /* 弹出位于队列末尾的空指针 */
-        if (!stream)
-        {
-                QUE_Pop(&streamQueue);
         }
 }
 

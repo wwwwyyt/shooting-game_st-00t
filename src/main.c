@@ -75,14 +75,14 @@ static int init(void)
 
 static int update(Uint64 timeNS, const Uint64 dtNS)
 {
-        if (timeNS == 1e9)
+        if (timeNS % (Uint64)0.03e9 == 0)
         {
-                AUDIO_PlayNoise(NOISE_PINK, 3.0f, 0.1f);
+                AUDIO_PlayNoise(NOISE_EXPLOSION_SHOOT, 0.5f, 0.1f);
         }
-        if (timeNS == 2e9)
-        {
-                AUDIO_PlayTone(WAVE_SINE, 540.0f, 3.0f, 0.1f);
-        }
+        // if (timeNS % (Uint64)1e9 == 0)
+        // {
+        //         AUDIO_PlayNoise(NOISE_EXPLOSION_SHOOT, 1.0f, 0.1f);
+        // }
 
         AUDIO_BreakStream();
 

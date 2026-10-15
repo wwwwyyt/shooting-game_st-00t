@@ -56,15 +56,28 @@ void *QUE_Pop(Queue *queue)
 
 void *QUE_Head(Queue *queue)
 {
+        if (QUE_IsEmpty(queue))
+        {
+                return NULL;
+        }
         return queue->q[queue->head];
 }
 
 void *QUE_Tail(Queue *queue)
 {
+        if (QUE_IsEmpty(queue))
+        {
+                return NULL;
+        }
         return queue->q[queue->tail];
 }
 
 int QUE_IsFull(Queue *queue)
 {
         return queue->cnt >= queue->size;
+}
+
+int QUE_IsEmpty(Queue *queue)
+{
+        return queue->cnt <= 0;
 }

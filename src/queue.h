@@ -36,4 +36,7 @@ void *QUE_Tail(Queue *queue);
 /** @brief 判断一个队列是否已满 */
 int QUE_IsFull(Queue *queue);
 
+/** @brief 判断一个队列是否为空 */
+int QUE_IsEmpty(Queue *queue);
+
 #endif /* SG_QUEUE_H */
