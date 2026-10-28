@@ -9,7 +9,7 @@
 
 typedef struct
 {
-        int texIdx;
+        int texID;
         int size;
 } Font;
 

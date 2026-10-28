@@ -237,18 +237,6 @@ CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 //The directory containing a CMake configuration file for FLAC.
 FLAC_DIR:PATH=C:/msys64/ucrt64/lib/cmake/FLAC
 
-//Path to a file.
-FREETYPE_INCLUDE_DIR_freetype2:PATH=C:/msys64/ucrt64/include/freetype2
-
-//Path to a file.
-FREETYPE_INCLUDE_DIR_ft2build:PATH=C:/msys64/ucrt64/include/freetype2
-
-//Path to a library.
-FREETYPE_LIBRARY_DEBUG:FILEPATH=FREETYPE_LIBRARY_DEBUG-NOTFOUND
-
-//Path to a library.
-FREETYPE_LIBRARY_RELEASE:FILEPATH=C:/msys64/ucrt64/lib/libfreetype.dll.a
-
 //Extra compile options of FluidSynth
 FluidSynth_COMPILE_OPTIONS:STRING=
 
@@ -262,16 +250,13 @@ FluidSynth_INCLUDE_PATH:PATH=C:/msys64/ucrt64/include
 FluidSynth_LIBRARY:FILEPATH=C:/msys64/ucrt64/lib/libfluidsynth-3.dll.a
 
 //Extra link directories of FluidSynth
-FluidSynth_LINK_DIRECTORIES:PATH=C:/msys64/ucrt64/lib
+FluidSynth_LINK_DIRECTORIES:PATH=C:/msys64/ucrt64/bin/../lib
 
 //Extra link libraries of FluidSynth
 FluidSynth_LINK_LIBRARIES:STRING=dsound;ksuser;winmm;ole32;ws2_32;m;sndfile;mp3lame;FLAC;m;ssp;vorbisenc;vorbis;m;ogg;opus;m;mpg123;shlwapi;portaudio;SDL3;m;iconv;kernel32;user32;gdi32;winmm;imm32;ole32;oleaut32;version;uuid;advapi32;setupapi;shell32;dinput8;readline;termcap
 
 //Extra link flags of FluidSynth
-FluidSynth_LINK_OPTIONS:STRING=C:/msys64/ucrt64/lib/libgomp.dll.a;C:/msys64/ucrt64/lib/libmingwthrd.a;-mwindows
-
-//The directory containing a CMake configuration file for Freetype.
-Freetype_DIR:PATH=Freetype_DIR-NOTFOUND
+FluidSynth_LINK_OPTIONS:STRING=C:/msys64/ucrt64/bin/../lib/libgomp.dll.a;C:/msys64/ucrt64/bin/../lib/libmingwthrd.a;-mwindows
 
 //Path to a file.
 LUA_INCLUDE_DIR:PATH=C:/msys64/ucrt64/include/lua5.4
@@ -307,7 +292,7 @@ OpusFile_INCLUDE_PATH:PATH=C:/msys64/ucrt64/include/opus
 OpusFile_LIBRARY:FILEPATH=C:/msys64/ucrt64/lib/libopusfile.dll.a
 
 //Extra link directories of opusfile
-OpusFile_LINK_DIRECTORIES:PATH=C:/msys64/ucrt64/lib
+OpusFile_LINK_DIRECTORIES:PATH=C:/msys64/ucrt64/bin/../lib
 
 //Extra link libraries of opusfile
 OpusFile_LINK_LIBRARIES:STRING=ogg;opus;m
@@ -328,7 +313,7 @@ Opus_INCLUDE_PATH:PATH=C:/msys64/ucrt64/include/opus
 Opus_LIBRARY:FILEPATH=C:/msys64/ucrt64/lib/libopus.dll.a
 
 //Extra link directories of opus
-Opus_LINK_DIRECTORIES:PATH=C:/msys64/ucrt64/lib
+Opus_LINK_DIRECTORIES:PATH=C:/msys64/ucrt64/bin/../lib
 
 //Extra link libraries of opus
 Opus_LINK_LIBRARIES:STRING=m
@@ -354,9 +339,6 @@ SDL3_image_DIR:PATH=C:/msys64/ucrt64/lib/cmake/SDL3_image
 //The directory containing a CMake configuration file for SDL3_mixer.
 SDL3_mixer_DIR:PATH=C:/msys64/ucrt64/lib/cmake/SDL3_mixer
 
-//The directory containing a CMake configuration file for SDL3_ttf.
-SDL3_ttf_DIR:PATH=C:/msys64/ucrt64/lib/cmake/SDL3_ttf
-
 //The directory containing a CMake configuration file for Threads.
 Threads_DIR:PATH=Threads_DIR-NOTFOUND
 
@@ -373,34 +355,13 @@ Vorbis_vorbisfile_INCLUDE_PATH:PATH=C:/msys64/ucrt64/include
 Vorbis_vorbisfile_LIBRARY:FILEPATH=C:/msys64/ucrt64/lib/libvorbisfile.dll.a
 
 //Extra link directories of vorbisfile
-Vorbis_vorbisfile_LINK_DIRECTORIES:PATH=C:/msys64/ucrt64/lib
+Vorbis_vorbisfile_LINK_DIRECTORIES:PATH=C:/msys64/ucrt64/bin/../lib
 
 //Extra link libraries of vorbisfile
 Vorbis_vorbisfile_LINK_LIBRARIES:STRING=vorbis;m;ogg
 
 //Extra link flags of vorbisfile
 Vorbis_vorbisfile_LINK_OPTIONS:STRING=
-
-//Extra compile flags of harfbuzz
-harfbuzz_COMPILE_OPTIONS:STRING=
-
-//The directory containing a CMake configuration file for harfbuzz.
-harfbuzz_DIR:PATH=harfbuzz_DIR-NOTFOUND
-
-//Path to a file.
-harfbuzz_INCLUDE_PATH:PATH=C:/msys64/ucrt64/include/harfbuzz
-
-//Path to a library.
-harfbuzz_LIBRARY:FILEPATH=C:/msys64/ucrt64/lib/libharfbuzz.dll.a
-
-//Extra link directories of harfbuzz
-harfbuzz_LINK_DIRECTORIES:PATH=C:/msys64/ucrt64/lib
-
-//Extra link libraries of harfbuzz
-harfbuzz_LINK_LIBRARIES:STRING=m;usp10;gdi32;rpcrt4;user32;dwrite;freetype;bz2;png16;m;z;brotlidec;brotlicommon;glib-2.0;intl;ws2_32;ole32;winmm;shlwapi;uuid;atomic;m;pcre2-8;graphite2
-
-//Extra link flags of harfbuzz
-harfbuzz_LINK_OPTIONS:STRING=
 
 //The directory containing a CMake configuration file for libxmp.
 libxmp_DIR:PATH=C:/msys64/ucrt64/lib/cmake/libxmp
@@ -418,7 +379,7 @@ mpg123_INCLUDE_PATH:PATH=C:/msys64/ucrt64/include
 mpg123_LIBRARY:FILEPATH=C:/msys64/ucrt64/lib/libmpg123.dll.a
 
 //Extra link directories of mpg123
-mpg123_LINK_DIRECTORIES:PATH=C:/msys64/ucrt64/lib
+mpg123_LINK_DIRECTORIES:PATH=C:/msys64/ucrt64/bin/../lib
 
 //Extra link libraries of mpg123
 mpg123_LINK_LIBRARIES:STRING=shlwapi
@@ -428,9 +389,6 @@ mpg123_LINK_OPTIONS:STRING=
 
 //Path to a library.
 pkgcfg_lib_PC_FLUIDSYNTH_fluidsynth-3:FILEPATH=C:/msys64/ucrt64/lib/libfluidsynth-3.dll.a
-
-//Path to a library.
-pkgcfg_lib_PC_HARFBUZZ_harfbuzz:FILEPATH=C:/msys64/ucrt64/lib/libharfbuzz.dll.a
 
 //Path to a library.
 pkgcfg_lib_PC_MPG123_mpg123:FILEPATH=C:/msys64/ucrt64/lib/libmpg123.dll.a
@@ -631,8 +589,6 @@ CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 CMAKE_WARN_DEPRECATED:INTERNAL=ON
 //Details about finding FluidSynth
 FIND_PACKAGE_MESSAGE_DETAILS_FluidSynth:INTERNAL=[C:/msys64/ucrt64/lib/libfluidsynth-3.dll.a][C:/msys64/ucrt64/include][v2.6.1(2.2.0)]
-//Details about finding Freetype
-FIND_PACKAGE_MESSAGE_DETAILS_Freetype:INTERNAL=[C:/msys64/ucrt64/lib/libfreetype.dll.a][C:/msys64/ucrt64/include/freetype2][v2.14.3()]
 //Details about finding Lua
 FIND_PACKAGE_MESSAGE_DETAILS_Lua:INTERNAL=[C:/msys64/ucrt64/lib/liblua5.4.dll.a][C:/msys64/ucrt64/include/lua5.4][v5.4.9()]
 //Details about finding OpenGL
@@ -645,20 +601,10 @@ FIND_PACKAGE_MESSAGE_DETAILS_OpusFile:INTERNAL=[C:/msys64/ucrt64/lib/libopusfile
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 //Details about finding Vorbis
 FIND_PACKAGE_MESSAGE_DETAILS_Vorbis:INTERNAL=[C:/msys64/ucrt64/lib/libvorbisfile.dll.a][C:/msys64/ucrt64/include][v()]
-//Details about finding harfbuzz
-FIND_PACKAGE_MESSAGE_DETAILS_harfbuzz:INTERNAL=[C:/msys64/ucrt64/lib/libharfbuzz.dll.a][C:/msys64/ucrt64/include/harfbuzz][v14.6.0(2.3.1)]
 //Details about finding mpg123
 FIND_PACKAGE_MESSAGE_DETAILS_mpg123:INTERNAL=[C:/msys64/ucrt64/lib/libmpg123.dll.a][C:/msys64/ucrt64/include][v()]
 //Details about finding wavpack
 FIND_PACKAGE_MESSAGE_DETAILS_wavpack:INTERNAL=[C:/msys64/ucrt64/lib/libwavpack.dll.a][C:/msys64/ucrt64/include][v()]
-//ADVANCED property for variable: FREETYPE_INCLUDE_DIR_freetype2
-FREETYPE_INCLUDE_DIR_freetype2-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: FREETYPE_INCLUDE_DIR_ft2build
-FREETYPE_INCLUDE_DIR_ft2build-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: FREETYPE_LIBRARY_DEBUG
-FREETYPE_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: FREETYPE_LIBRARY_RELEASE
-FREETYPE_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: LUA_INCLUDE_DIR
 LUA_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: LUA_LIBRARY
@@ -667,32 +613,32 @@ LUA_LIBRARY-ADVANCED:INTERNAL=1
 OPENGL_gl_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: OPENGL_glu_LIBRARY
 OPENGL_glu_LIBRARY-ADVANCED:INTERNAL=1
-PC_FLUIDSYNTH_CFLAGS:INTERNAL=-IC:/msys64/ucrt64/include;-IC:/msys64/ucrt64/include/opus
+PC_FLUIDSYNTH_CFLAGS:INTERNAL=-IC:/msys64/ucrt64/bin/../include;-IC:/msys64/ucrt64/bin/../include/opus
 PC_FLUIDSYNTH_CFLAGS_I:INTERNAL=
 PC_FLUIDSYNTH_CFLAGS_OTHER:INTERNAL=
 PC_FLUIDSYNTH_FOUND:INTERNAL=1
-PC_FLUIDSYNTH_INCLUDEDIR:INTERNAL=C:/msys64/ucrt64/include
-PC_FLUIDSYNTH_INCLUDE_DIRS:INTERNAL=C:/msys64/ucrt64/include;C:/msys64/ucrt64/include/opus
-PC_FLUIDSYNTH_LDFLAGS:INTERNAL=-LC:/msys64/ucrt64/lib;-lfluidsynth-3
+PC_FLUIDSYNTH_INCLUDEDIR:INTERNAL=C:/msys64/ucrt64/bin/../include
+PC_FLUIDSYNTH_INCLUDE_DIRS:INTERNAL=C:/msys64/ucrt64/bin/../include;C:/msys64/ucrt64/bin/../include/opus
+PC_FLUIDSYNTH_LDFLAGS:INTERNAL=-LC:/msys64/ucrt64/bin/../lib;-lfluidsynth-3
 PC_FLUIDSYNTH_LDFLAGS_OTHER:INTERNAL=
-PC_FLUIDSYNTH_LIBDIR:INTERNAL=C:/msys64/ucrt64/lib
+PC_FLUIDSYNTH_LIBDIR:INTERNAL=C:/msys64/ucrt64/bin/../lib
 PC_FLUIDSYNTH_LIBRARIES:INTERNAL=fluidsynth-3
-PC_FLUIDSYNTH_LIBRARY_DIRS:INTERNAL=C:/msys64/ucrt64/lib
+PC_FLUIDSYNTH_LIBRARY_DIRS:INTERNAL=C:/msys64/ucrt64/bin/../lib
 PC_FLUIDSYNTH_LIBS:INTERNAL=
 PC_FLUIDSYNTH_LIBS_L:INTERNAL=
 PC_FLUIDSYNTH_LIBS_OTHER:INTERNAL=
 PC_FLUIDSYNTH_LIBS_PATHS:INTERNAL=
 PC_FLUIDSYNTH_MODULE_NAME:INTERNAL=fluidsynth
-PC_FLUIDSYNTH_PREFIX:INTERNAL=C:/msys64/ucrt64
-PC_FLUIDSYNTH_STATIC_CFLAGS:INTERNAL=-IC:/msys64/ucrt64/include;-IC:/msys64/ucrt64/include/opus
+PC_FLUIDSYNTH_PREFIX:INTERNAL=C:/msys64/ucrt64/bin/..
+PC_FLUIDSYNTH_STATIC_CFLAGS:INTERNAL=-IC:/msys64/ucrt64/bin/../include;-IC:/msys64/ucrt64/bin/../include/opus
 PC_FLUIDSYNTH_STATIC_CFLAGS_I:INTERNAL=
 PC_FLUIDSYNTH_STATIC_CFLAGS_OTHER:INTERNAL=
-PC_FLUIDSYNTH_STATIC_INCLUDE_DIRS:INTERNAL=C:/msys64/ucrt64/include;C:/msys64/ucrt64/include/opus
-PC_FLUIDSYNTH_STATIC_LDFLAGS:INTERNAL=-LC:/msys64/ucrt64/lib;-lfluidsynth-3;-ldsound;-lksuser;-lwinmm;-lole32;-lws2_32;-lm;C:/msys64/ucrt64/lib/libgomp.dll.a;C:/msys64/ucrt64/lib/libmingwthrd.a;-lsndfile;-lmp3lame;-lFLAC;-lm;-lssp;-lvorbisenc;-lvorbis;-lm;-logg;-lopus;-lm;-lmpg123;-lshlwapi;-lportaudio;-lSDL3;-mwindows;-lm;-liconv;-lkernel32;-luser32;-lgdi32;-lwinmm;-limm32;-lole32;-loleaut32;-lversion;-luuid;-ladvapi32;-lsetupapi;-lshell32;-ldinput8;-lreadline;-ltermcap
-PC_FLUIDSYNTH_STATIC_LDFLAGS_OTHER:INTERNAL=C:/msys64/ucrt64/lib/libgomp.dll.a;C:/msys64/ucrt64/lib/libmingwthrd.a;-mwindows
+PC_FLUIDSYNTH_STATIC_INCLUDE_DIRS:INTERNAL=C:/msys64/ucrt64/bin/../include;C:/msys64/ucrt64/bin/../include/opus
+PC_FLUIDSYNTH_STATIC_LDFLAGS:INTERNAL=-LC:/msys64/ucrt64/bin/../lib;-lfluidsynth-3;-ldsound;-lksuser;-lwinmm;-lole32;-lws2_32;-lm;C:/msys64/ucrt64/bin/../lib/libgomp.dll.a;C:/msys64/ucrt64/bin/../lib/libmingwthrd.a;-lsndfile;-lmp3lame;-lFLAC;-lm;-lssp;-lvorbisenc;-lvorbis;-lm;-logg;-lopus;-lm;-lmpg123;-lshlwapi;-lportaudio;-lSDL3;-mwindows;-lm;-liconv;-lkernel32;-luser32;-lgdi32;-lwinmm;-limm32;-lole32;-loleaut32;-lversion;-luuid;-ladvapi32;-lsetupapi;-lshell32;-ldinput8;-lreadline;-ltermcap
+PC_FLUIDSYNTH_STATIC_LDFLAGS_OTHER:INTERNAL=C:/msys64/ucrt64/bin/../lib/libgomp.dll.a;C:/msys64/ucrt64/bin/../lib/libmingwthrd.a;-mwindows
 PC_FLUIDSYNTH_STATIC_LIBDIR:INTERNAL=
 PC_FLUIDSYNTH_STATIC_LIBRARIES:INTERNAL=fluidsynth-3;dsound;ksuser;winmm;ole32;ws2_32;m;sndfile;mp3lame;FLAC;m;ssp;vorbisenc;vorbis;m;ogg;opus;m;mpg123;shlwapi;portaudio;SDL3;m;iconv;kernel32;user32;gdi32;winmm;imm32;ole32;oleaut32;version;uuid;advapi32;setupapi;shell32;dinput8;readline;termcap
-PC_FLUIDSYNTH_STATIC_LIBRARY_DIRS:INTERNAL=C:/msys64/ucrt64/lib
+PC_FLUIDSYNTH_STATIC_LIBRARY_DIRS:INTERNAL=C:/msys64/ucrt64/bin/../lib
 PC_FLUIDSYNTH_STATIC_LIBS:INTERNAL=
 PC_FLUIDSYNTH_STATIC_LIBS_L:INTERNAL=
 PC_FLUIDSYNTH_STATIC_LIBS_OTHER:INTERNAL=
@@ -702,67 +648,32 @@ PC_FLUIDSYNTH_fluidsynth_INCLUDEDIR:INTERNAL=
 PC_FLUIDSYNTH_fluidsynth_LIBDIR:INTERNAL=
 PC_FLUIDSYNTH_fluidsynth_PREFIX:INTERNAL=
 PC_FLUIDSYNTH_fluidsynth_VERSION:INTERNAL=
-PC_HARFBUZZ_CFLAGS:INTERNAL=-IC:/msys64/ucrt64/include/harfbuzz;-IC:/msys64/ucrt64/include/freetype2;-IC:/msys64/ucrt64/include;-IC:/msys64/ucrt64/include/libpng16;-IC:/msys64/ucrt64/include/glib-2.0;-IC:/msys64/ucrt64/lib/glib-2.0/include
-PC_HARFBUZZ_CFLAGS_I:INTERNAL=
-PC_HARFBUZZ_CFLAGS_OTHER:INTERNAL=
-PC_HARFBUZZ_FOUND:INTERNAL=1
-PC_HARFBUZZ_INCLUDEDIR:INTERNAL=C:/msys64/ucrt64/include
-PC_HARFBUZZ_INCLUDE_DIRS:INTERNAL=C:/msys64/ucrt64/include/harfbuzz;C:/msys64/ucrt64/include/freetype2;C:/msys64/ucrt64/include;C:/msys64/ucrt64/include/libpng16;C:/msys64/ucrt64/include/glib-2.0;C:/msys64/ucrt64/lib/glib-2.0/include
-PC_HARFBUZZ_LDFLAGS:INTERNAL=-LC:/msys64/ucrt64/lib;-lharfbuzz
-PC_HARFBUZZ_LDFLAGS_OTHER:INTERNAL=
-PC_HARFBUZZ_LIBDIR:INTERNAL=C:/msys64/ucrt64/lib
-PC_HARFBUZZ_LIBRARIES:INTERNAL=harfbuzz
-PC_HARFBUZZ_LIBRARY_DIRS:INTERNAL=C:/msys64/ucrt64/lib
-PC_HARFBUZZ_LIBS:INTERNAL=
-PC_HARFBUZZ_LIBS_L:INTERNAL=
-PC_HARFBUZZ_LIBS_OTHER:INTERNAL=
-PC_HARFBUZZ_LIBS_PATHS:INTERNAL=
-PC_HARFBUZZ_MODULE_NAME:INTERNAL=harfbuzz
-PC_HARFBUZZ_PREFIX:INTERNAL=C:/msys64/ucrt64
-PC_HARFBUZZ_STATIC_CFLAGS:INTERNAL=-IC:/msys64/ucrt64/include/harfbuzz;-IC:/msys64/ucrt64/include/freetype2;-IC:/msys64/ucrt64/include;-IC:/msys64/ucrt64/include/libpng16;-IC:/msys64/ucrt64/include/glib-2.0;-IC:/msys64/ucrt64/lib/glib-2.0/include
-PC_HARFBUZZ_STATIC_CFLAGS_I:INTERNAL=
-PC_HARFBUZZ_STATIC_CFLAGS_OTHER:INTERNAL=
-PC_HARFBUZZ_STATIC_INCLUDE_DIRS:INTERNAL=C:/msys64/ucrt64/include/harfbuzz;C:/msys64/ucrt64/include/freetype2;C:/msys64/ucrt64/include;C:/msys64/ucrt64/include/libpng16;C:/msys64/ucrt64/include/glib-2.0;C:/msys64/ucrt64/lib/glib-2.0/include
-PC_HARFBUZZ_STATIC_LDFLAGS:INTERNAL=-LC:/msys64/ucrt64/lib;-lharfbuzz;-lm;-lusp10;-lgdi32;-lrpcrt4;-luser32;-ldwrite;-lfreetype;-lbz2;-lpng16;-lm;-lz;-lbrotlidec;-lbrotlicommon;-lglib-2.0;-lintl;-lws2_32;-lole32;-lwinmm;-lshlwapi;-luuid;-latomic;-lm;-lpcre2-8;-lgraphite2
-PC_HARFBUZZ_STATIC_LDFLAGS_OTHER:INTERNAL=
-PC_HARFBUZZ_STATIC_LIBDIR:INTERNAL=
-PC_HARFBUZZ_STATIC_LIBRARIES:INTERNAL=harfbuzz;m;usp10;gdi32;rpcrt4;user32;dwrite;freetype;bz2;png16;m;z;brotlidec;brotlicommon;glib-2.0;intl;ws2_32;ole32;winmm;shlwapi;uuid;atomic;m;pcre2-8;graphite2
-PC_HARFBUZZ_STATIC_LIBRARY_DIRS:INTERNAL=C:/msys64/ucrt64/lib
-PC_HARFBUZZ_STATIC_LIBS:INTERNAL=
-PC_HARFBUZZ_STATIC_LIBS_L:INTERNAL=
-PC_HARFBUZZ_STATIC_LIBS_OTHER:INTERNAL=
-PC_HARFBUZZ_STATIC_LIBS_PATHS:INTERNAL=
-PC_HARFBUZZ_VERSION:INTERNAL=14.6.0
-PC_HARFBUZZ_harfbuzz_INCLUDEDIR:INTERNAL=
-PC_HARFBUZZ_harfbuzz_LIBDIR:INTERNAL=
-PC_HARFBUZZ_harfbuzz_PREFIX:INTERNAL=
-PC_HARFBUZZ_harfbuzz_VERSION:INTERNAL=
-PC_MPG123_CFLAGS:INTERNAL=-IC:/msys64/ucrt64/include
+PC_MPG123_CFLAGS:INTERNAL=-IC:/msys64/ucrt64/bin/../include
 PC_MPG123_CFLAGS_I:INTERNAL=
 PC_MPG123_CFLAGS_OTHER:INTERNAL=
 PC_MPG123_FOUND:INTERNAL=1
-PC_MPG123_INCLUDEDIR:INTERNAL=C:/msys64/ucrt64/include
-PC_MPG123_INCLUDE_DIRS:INTERNAL=C:/msys64/ucrt64/include
-PC_MPG123_LDFLAGS:INTERNAL=-LC:/msys64/ucrt64/lib;-lmpg123
+PC_MPG123_INCLUDEDIR:INTERNAL=C:/msys64/ucrt64/bin/../include
+PC_MPG123_INCLUDE_DIRS:INTERNAL=C:/msys64/ucrt64/bin/../include
+PC_MPG123_LDFLAGS:INTERNAL=-LC:/msys64/ucrt64/bin/../lib;-lmpg123
 PC_MPG123_LDFLAGS_OTHER:INTERNAL=
-PC_MPG123_LIBDIR:INTERNAL=C:/msys64/ucrt64/lib
+PC_MPG123_LIBDIR:INTERNAL=C:/msys64/ucrt64/bin/../lib
 PC_MPG123_LIBRARIES:INTERNAL=mpg123
-PC_MPG123_LIBRARY_DIRS:INTERNAL=C:/msys64/ucrt64/lib
+PC_MPG123_LIBRARY_DIRS:INTERNAL=C:/msys64/ucrt64/bin/../lib
 PC_MPG123_LIBS:INTERNAL=
 PC_MPG123_LIBS_L:INTERNAL=
 PC_MPG123_LIBS_OTHER:INTERNAL=
 PC_MPG123_LIBS_PATHS:INTERNAL=
 PC_MPG123_MODULE_NAME:INTERNAL=libmpg123
-PC_MPG123_PREFIX:INTERNAL=C:/msys64/ucrt64
-PC_MPG123_STATIC_CFLAGS:INTERNAL=-IC:/msys64/ucrt64/include
+PC_MPG123_PREFIX:INTERNAL=C:/msys64/ucrt64/bin/..
+PC_MPG123_STATIC_CFLAGS:INTERNAL=-IC:/msys64/ucrt64/bin/../include
 PC_MPG123_STATIC_CFLAGS_I:INTERNAL=
 PC_MPG123_STATIC_CFLAGS_OTHER:INTERNAL=
-PC_MPG123_STATIC_INCLUDE_DIRS:INTERNAL=C:/msys64/ucrt64/include
-PC_MPG123_STATIC_LDFLAGS:INTERNAL=-LC:/msys64/ucrt64/lib;-lmpg123;-lshlwapi
+PC_MPG123_STATIC_INCLUDE_DIRS:INTERNAL=C:/msys64/ucrt64/bin/../include
+PC_MPG123_STATIC_LDFLAGS:INTERNAL=-LC:/msys64/ucrt64/bin/../lib;-lmpg123;-lshlwapi
 PC_MPG123_STATIC_LDFLAGS_OTHER:INTERNAL=
 PC_MPG123_STATIC_LIBDIR:INTERNAL=
 PC_MPG123_STATIC_LIBRARIES:INTERNAL=mpg123;shlwapi
-PC_MPG123_STATIC_LIBRARY_DIRS:INTERNAL=C:/msys64/ucrt64/lib
+PC_MPG123_STATIC_LIBRARY_DIRS:INTERNAL=C:/msys64/ucrt64/bin/../lib
 PC_MPG123_STATIC_LIBS:INTERNAL=
 PC_MPG123_STATIC_LIBS_L:INTERNAL=
 PC_MPG123_STATIC_LIBS_OTHER:INTERNAL=
@@ -772,32 +683,32 @@ PC_MPG123_libmpg123_INCLUDEDIR:INTERNAL=
 PC_MPG123_libmpg123_LIBDIR:INTERNAL=
 PC_MPG123_libmpg123_PREFIX:INTERNAL=
 PC_MPG123_libmpg123_VERSION:INTERNAL=
-PC_OPUSFILE_CFLAGS:INTERNAL=-IC:/msys64/ucrt64/include/opus;-IC:/msys64/ucrt64/include
+PC_OPUSFILE_CFLAGS:INTERNAL=-IC:/msys64/ucrt64/bin/../include/opus;-IC:/msys64/ucrt64/bin/../include
 PC_OPUSFILE_CFLAGS_I:INTERNAL=
 PC_OPUSFILE_CFLAGS_OTHER:INTERNAL=
 PC_OPUSFILE_FOUND:INTERNAL=1
-PC_OPUSFILE_INCLUDEDIR:INTERNAL=C:/msys64/ucrt64/include
-PC_OPUSFILE_INCLUDE_DIRS:INTERNAL=C:/msys64/ucrt64/include/opus;C:/msys64/ucrt64/include
-PC_OPUSFILE_LDFLAGS:INTERNAL=-LC:/msys64/ucrt64/lib;-lopusfile
+PC_OPUSFILE_INCLUDEDIR:INTERNAL=C:/msys64/ucrt64/bin/../include
+PC_OPUSFILE_INCLUDE_DIRS:INTERNAL=C:/msys64/ucrt64/bin/../include/opus;C:/msys64/ucrt64/bin/../include
+PC_OPUSFILE_LDFLAGS:INTERNAL=-LC:/msys64/ucrt64/bin/../lib;-lopusfile
 PC_OPUSFILE_LDFLAGS_OTHER:INTERNAL=
-PC_OPUSFILE_LIBDIR:INTERNAL=C:/msys64/ucrt64/lib
+PC_OPUSFILE_LIBDIR:INTERNAL=C:/msys64/ucrt64/bin/../lib
 PC_OPUSFILE_LIBRARIES:INTERNAL=opusfile
-PC_OPUSFILE_LIBRARY_DIRS:INTERNAL=C:/msys64/ucrt64/lib
+PC_OPUSFILE_LIBRARY_DIRS:INTERNAL=C:/msys64/ucrt64/bin/../lib
 PC_OPUSFILE_LIBS:INTERNAL=
 PC_OPUSFILE_LIBS_L:INTERNAL=
 PC_OPUSFILE_LIBS_OTHER:INTERNAL=
 PC_OPUSFILE_LIBS_PATHS:INTERNAL=
 PC_OPUSFILE_MODULE_NAME:INTERNAL=opusfile
-PC_OPUSFILE_PREFIX:INTERNAL=C:/msys64/ucrt64
-PC_OPUSFILE_STATIC_CFLAGS:INTERNAL=-IC:/msys64/ucrt64/include/opus;-IC:/msys64/ucrt64/include
+PC_OPUSFILE_PREFIX:INTERNAL=C:/msys64/ucrt64/bin/..
+PC_OPUSFILE_STATIC_CFLAGS:INTERNAL=-IC:/msys64/ucrt64/bin/../include/opus;-IC:/msys64/ucrt64/bin/../include
 PC_OPUSFILE_STATIC_CFLAGS_I:INTERNAL=
 PC_OPUSFILE_STATIC_CFLAGS_OTHER:INTERNAL=
-PC_OPUSFILE_STATIC_INCLUDE_DIRS:INTERNAL=C:/msys64/ucrt64/include/opus;C:/msys64/ucrt64/include
-PC_OPUSFILE_STATIC_LDFLAGS:INTERNAL=-LC:/msys64/ucrt64/lib;-lopusfile;-logg;-lopus;-lm
+PC_OPUSFILE_STATIC_INCLUDE_DIRS:INTERNAL=C:/msys64/ucrt64/bin/../include/opus;C:/msys64/ucrt64/bin/../include
+PC_OPUSFILE_STATIC_LDFLAGS:INTERNAL=-LC:/msys64/ucrt64/bin/../lib;-lopusfile;-logg;-lopus;-lm
 PC_OPUSFILE_STATIC_LDFLAGS_OTHER:INTERNAL=
 PC_OPUSFILE_STATIC_LIBDIR:INTERNAL=
 PC_OPUSFILE_STATIC_LIBRARIES:INTERNAL=opusfile;ogg;opus;m
-PC_OPUSFILE_STATIC_LIBRARY_DIRS:INTERNAL=C:/msys64/ucrt64/lib
+PC_OPUSFILE_STATIC_LIBRARY_DIRS:INTERNAL=C:/msys64/ucrt64/bin/../lib
 PC_OPUSFILE_STATIC_LIBS:INTERNAL=
 PC_OPUSFILE_STATIC_LIBS_L:INTERNAL=
 PC_OPUSFILE_STATIC_LIBS_OTHER:INTERNAL=
@@ -807,32 +718,32 @@ PC_OPUSFILE_opusfile_INCLUDEDIR:INTERNAL=
 PC_OPUSFILE_opusfile_LIBDIR:INTERNAL=
 PC_OPUSFILE_opusfile_PREFIX:INTERNAL=
 PC_OPUSFILE_opusfile_VERSION:INTERNAL=
-PC_OPUS_CFLAGS:INTERNAL=-IC:/msys64/ucrt64/include/opus
+PC_OPUS_CFLAGS:INTERNAL=-IC:/msys64/ucrt64/bin/../include/opus
 PC_OPUS_CFLAGS_I:INTERNAL=
 PC_OPUS_CFLAGS_OTHER:INTERNAL=
 PC_OPUS_FOUND:INTERNAL=1
-PC_OPUS_INCLUDEDIR:INTERNAL=C:/msys64/ucrt64/include
-PC_OPUS_INCLUDE_DIRS:INTERNAL=C:/msys64/ucrt64/include/opus
-PC_OPUS_LDFLAGS:INTERNAL=-LC:/msys64/ucrt64/lib;-lopus
+PC_OPUS_INCLUDEDIR:INTERNAL=C:/msys64/ucrt64/bin/../include
+PC_OPUS_INCLUDE_DIRS:INTERNAL=C:/msys64/ucrt64/bin/../include/opus
+PC_OPUS_LDFLAGS:INTERNAL=-LC:/msys64/ucrt64/bin/../lib;-lopus
 PC_OPUS_LDFLAGS_OTHER:INTERNAL=
-PC_OPUS_LIBDIR:INTERNAL=C:/msys64/ucrt64/lib
+PC_OPUS_LIBDIR:INTERNAL=C:/msys64/ucrt64/bin/../lib
 PC_OPUS_LIBRARIES:INTERNAL=opus
-PC_OPUS_LIBRARY_DIRS:INTERNAL=C:/msys64/ucrt64/lib
+PC_OPUS_LIBRARY_DIRS:INTERNAL=C:/msys64/ucrt64/bin/../lib
 PC_OPUS_LIBS:INTERNAL=
 PC_OPUS_LIBS_L:INTERNAL=
 PC_OPUS_LIBS_OTHER:INTERNAL=
 PC_OPUS_LIBS_PATHS:INTERNAL=
 PC_OPUS_MODULE_NAME:INTERNAL=opus
-PC_OPUS_PREFIX:INTERNAL=C:/msys64/ucrt64
-PC_OPUS_STATIC_CFLAGS:INTERNAL=-IC:/msys64/ucrt64/include/opus
+PC_OPUS_PREFIX:INTERNAL=C:/msys64/ucrt64/bin/..
+PC_OPUS_STATIC_CFLAGS:INTERNAL=-IC:/msys64/ucrt64/bin/../include/opus
 PC_OPUS_STATIC_CFLAGS_I:INTERNAL=
 PC_OPUS_STATIC_CFLAGS_OTHER:INTERNAL=
-PC_OPUS_STATIC_INCLUDE_DIRS:INTERNAL=C:/msys64/ucrt64/include/opus
-PC_OPUS_STATIC_LDFLAGS:INTERNAL=-LC:/msys64/ucrt64/lib;-lopus;-lm
+PC_OPUS_STATIC_INCLUDE_DIRS:INTERNAL=C:/msys64/ucrt64/bin/../include/opus
+PC_OPUS_STATIC_LDFLAGS:INTERNAL=-LC:/msys64/ucrt64/bin/../lib;-lopus;-lm
 PC_OPUS_STATIC_LDFLAGS_OTHER:INTERNAL=
 PC_OPUS_STATIC_LIBDIR:INTERNAL=
 PC_OPUS_STATIC_LIBRARIES:INTERNAL=opus;m
-PC_OPUS_STATIC_LIBRARY_DIRS:INTERNAL=C:/msys64/ucrt64/lib
+PC_OPUS_STATIC_LIBRARY_DIRS:INTERNAL=C:/msys64/ucrt64/bin/../lib
 PC_OPUS_STATIC_LIBS:INTERNAL=
 PC_OPUS_STATIC_LIBS_L:INTERNAL=
 PC_OPUS_STATIC_LIBS_OTHER:INTERNAL=
@@ -842,32 +753,32 @@ PC_OPUS_opus_INCLUDEDIR:INTERNAL=
 PC_OPUS_opus_LIBDIR:INTERNAL=
 PC_OPUS_opus_PREFIX:INTERNAL=
 PC_OPUS_opus_VERSION:INTERNAL=
-PC_VORBIS_CFLAGS:INTERNAL=-IC:/msys64/ucrt64/include
+PC_VORBIS_CFLAGS:INTERNAL=-IC:/msys64/ucrt64/bin/../include
 PC_VORBIS_CFLAGS_I:INTERNAL=
 PC_VORBIS_CFLAGS_OTHER:INTERNAL=
 PC_VORBIS_FOUND:INTERNAL=1
-PC_VORBIS_INCLUDEDIR:INTERNAL=C:/msys64/ucrt64/include
-PC_VORBIS_INCLUDE_DIRS:INTERNAL=C:/msys64/ucrt64/include
-PC_VORBIS_LDFLAGS:INTERNAL=-LC:/msys64/ucrt64/lib;-lvorbisfile
+PC_VORBIS_INCLUDEDIR:INTERNAL=C:/msys64/ucrt64/bin/../include
+PC_VORBIS_INCLUDE_DIRS:INTERNAL=C:/msys64/ucrt64/bin/../include
+PC_VORBIS_LDFLAGS:INTERNAL=-LC:/msys64/ucrt64/bin/../lib;-lvorbisfile
 PC_VORBIS_LDFLAGS_OTHER:INTERNAL=
-PC_VORBIS_LIBDIR:INTERNAL=C:/msys64/ucrt64/lib
+PC_VORBIS_LIBDIR:INTERNAL=C:/msys64/ucrt64/bin/../lib
 PC_VORBIS_LIBRARIES:INTERNAL=vorbisfile
-PC_VORBIS_LIBRARY_DIRS:INTERNAL=C:/msys64/ucrt64/lib
+PC_VORBIS_LIBRARY_DIRS:INTERNAL=C:/msys64/ucrt64/bin/../lib
 PC_VORBIS_LIBS:INTERNAL=
 PC_VORBIS_LIBS_L:INTERNAL=
 PC_VORBIS_LIBS_OTHER:INTERNAL=
 PC_VORBIS_LIBS_PATHS:INTERNAL=
 PC_VORBIS_MODULE_NAME:INTERNAL=vorbisfile
-PC_VORBIS_PREFIX:INTERNAL=C:/msys64/ucrt64
-PC_VORBIS_STATIC_CFLAGS:INTERNAL=-IC:/msys64/ucrt64/include
+PC_VORBIS_PREFIX:INTERNAL=C:/msys64/ucrt64/bin/..
+PC_VORBIS_STATIC_CFLAGS:INTERNAL=-IC:/msys64/ucrt64/bin/../include
 PC_VORBIS_STATIC_CFLAGS_I:INTERNAL=
 PC_VORBIS_STATIC_CFLAGS_OTHER:INTERNAL=
-PC_VORBIS_STATIC_INCLUDE_DIRS:INTERNAL=C:/msys64/ucrt64/include
-PC_VORBIS_STATIC_LDFLAGS:INTERNAL=-LC:/msys64/ucrt64/lib;-lvorbisfile;-lvorbis;-lm;-logg
+PC_VORBIS_STATIC_INCLUDE_DIRS:INTERNAL=C:/msys64/ucrt64/bin/../include
+PC_VORBIS_STATIC_LDFLAGS:INTERNAL=-LC:/msys64/ucrt64/bin/../lib;-lvorbisfile;-lvorbis;-lm;-logg
 PC_VORBIS_STATIC_LDFLAGS_OTHER:INTERNAL=
 PC_VORBIS_STATIC_LIBDIR:INTERNAL=
 PC_VORBIS_STATIC_LIBRARIES:INTERNAL=vorbisfile;vorbis;m;ogg
-PC_VORBIS_STATIC_LIBRARY_DIRS:INTERNAL=C:/msys64/ucrt64/lib
+PC_VORBIS_STATIC_LIBRARY_DIRS:INTERNAL=C:/msys64/ucrt64/bin/../lib
 PC_VORBIS_STATIC_LIBS:INTERNAL=
 PC_VORBIS_STATIC_LIBS_L:INTERNAL=
 PC_VORBIS_STATIC_LIBS_OTHER:INTERNAL=
@@ -882,21 +793,17 @@ PKG_CONFIG_ARGN-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: PKG_CONFIG_EXECUTABLE
 PKG_CONFIG_EXECUTABLE-ADVANCED:INTERNAL=1
 __pkg_config_arguments_PC_FLUIDSYNTH:INTERNAL=QUIET;fluidsynth
-__pkg_config_arguments_PC_HARFBUZZ:INTERNAL=QUIET;harfbuzz
 __pkg_config_arguments_PC_MPG123:INTERNAL=QUIET;libmpg123
 __pkg_config_arguments_PC_OPUS:INTERNAL=QUIET;opus
 __pkg_config_arguments_PC_OPUSFILE:INTERNAL=QUIET;opusfile
 __pkg_config_arguments_PC_VORBIS:INTERNAL=QUIET;vorbisfile
 __pkg_config_checked_PC_FLUIDSYNTH:INTERNAL=1
-__pkg_config_checked_PC_HARFBUZZ:INTERNAL=1
 __pkg_config_checked_PC_MPG123:INTERNAL=1
 __pkg_config_checked_PC_OPUS:INTERNAL=1
 __pkg_config_checked_PC_OPUSFILE:INTERNAL=1
 __pkg_config_checked_PC_VORBIS:INTERNAL=1
 //ADVANCED property for variable: pkgcfg_lib_PC_FLUIDSYNTH_fluidsynth-3
 pkgcfg_lib_PC_FLUIDSYNTH_fluidsynth-3-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: pkgcfg_lib_PC_HARFBUZZ_harfbuzz
-pkgcfg_lib_PC_HARFBUZZ_harfbuzz-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: pkgcfg_lib_PC_MPG123_mpg123
 pkgcfg_lib_PC_MPG123_mpg123-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: pkgcfg_lib_PC_OPUSFILE_opusfile
@@ -905,5 +812,5 @@ pkgcfg_lib_PC_OPUSFILE_opusfile-ADVANCED:INTERNAL=1
 pkgcfg_lib_PC_OPUS_opus-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: pkgcfg_lib_PC_VORBIS_vorbisfile
 pkgcfg_lib_PC_VORBIS_vorbisfile-ADVANCED:INTERNAL=1
-prefix_result:INTERNAL=C:/msys64/ucrt64/lib
+prefix_result:INTERNAL=C:/msys64/ucrt64/bin/../lib
 

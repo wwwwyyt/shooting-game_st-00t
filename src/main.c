@@ -45,12 +45,25 @@ static int init(void)
         /* 初始化 Lua 环境 */
         L = luaL_newstate();
         luaL_openlibs(L);
+        if (luaL_dofile(L, "scripts/init.lua") != LUA_OK)
+        {
+                SDL_Log("Couldn't load lua: %s\n", lua_tostring(L, -1));
+                lua_close(L);
+                return 1;
+        }
+        if (!lua_istable(L, -1))
+        {
+                SDL_Log("init.lua must return a table\n");
+                lua_pop(L, 1);
+                return 1;
+        }
 
         /* 加载配置文件 */
-        if (luaL_dofile(L, "scripts/config.lua") != LUA_OK)
+        lua_getfield(L, -1, "load_config");
+        if (lua_pcall(L, 0, 1, 0) != LUA_OK)
         {
-                SDL_Log("Couldn't load lua config: %s\n", lua_tostring(L, -1));
-                lua_close(L);
+                SDL_Log("%s\n", lua_tostring(L, -1));
+                lua_pop(L, 1);
                 return 1;
         }
 
@@ -75,16 +88,6 @@ static int init(void)
 
 static int update(Uint64 timeNS, const Uint64 dtNS)
 {
-        if (timeNS % (Uint64)0.03e9 == 0)
-        {
-                AUDIO_PlayNoise(NOISE_EXPLOSION_SHOOT, 0.5f, 0.1f);
-        }
-        // if (timeNS % (Uint64)1e9 == 0)
-        // {
-        //         AUDIO_PlayNoise(NOISE_EXPLOSION_SHOOT, 1.0f, 0.1f);
-        // }
-
-        AUDIO_BreakStream();
 
         return 0;
 }
@@ -192,6 +195,10 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                 /* 处理键盘按下 */
                 INPUT_DoKeyDown(event);
                 break;
+        case SDL_EVENT_KEY_UP:
+                /* 处理键盘松开 */
+                INPUT_DoKeyUp(event);
+                break;
         case SDL_EVENT_GAMEPAD_ADDED:
                 /* 处理手柄连接 */
                 INPUT_GamePadAdded(event);
@@ -202,7 +209,11 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                 break;
         case SDL_EVENT_GAMEPAD_BUTTON_DOWN:
                 /* 处理手柄按钮按下 */
-                INPUT_DoGamePadBtnDown(event);
+                INPUT_DoGamePadBtnEvent(event);
+                break;
+        case SDL_EVENT_GAMEPAD_BUTTON_UP:
+                /* 处理手柄按钮松开 */
+                INPUT_DoGamePadBtnEvent(event);
                 break;
         case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED:
                 /* 处理窗口像素尺寸变化 */

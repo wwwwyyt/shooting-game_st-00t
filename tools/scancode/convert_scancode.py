@@ -23,8 +23,11 @@ def generate_lua(matches, output_file=None):
         "-- Auto generated file, do not modified manually.",
         "local SDL_Scancode = {"
     ]
+    prefix = "SDL_SCANCODE_"
     for name, value in matches:
-        lines.append(f"    {name} = {value},")
+        # 去掉前缀并转为小写
+        key = name[len(prefix):].lower() if name.startswith(prefix) else name.lower()
+        lines.append(f'    ["{key}"] = {value},')
     lines.append("}")
     lines.append("")
     lines.append("return SDL_Scancode")

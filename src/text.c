@@ -57,7 +57,7 @@ int TEXT_Init(lua_State *L)
 
                 /* 读取字库文件索引 */
                 lua_getfield(L, -1, "texture");
-                fonts[i - 1].texIdx = lua_tointeger(L, -1);
+                fonts[i - 1].texID = lua_tointeger(L, -1);
                 lua_pop(L, 1);
 
                 /* 读取字符像素大小 */
@@ -80,9 +80,9 @@ int TEXT_RenderText(int fontIdx, int charCnt, const int *charIdxArr, SDL_FRect *
         Font *font = &(fonts[fontIdx]);
 
         /* 获取字库纹理相关信息 */
-        int texIdx = font->texIdx;
+        int texID = font->texID;
         int texW, texH;
-        GRAPHIC_GetTextureSize(texIdx, &texW, &texH);
+        GRAPHIC_GetTextureSize(texID, &texW, &texH);
 
         /* 获取字库纹理每列的字符数 */
         int colCnt = texW / font->size;
@@ -94,7 +94,7 @@ int TEXT_RenderText(int fontIdx, int charCnt, const int *charIdxArr, SDL_FRect *
                 srcrect.x = (charIdxArr[i] % colCnt) * font->size;
                 srcrect.y = (charIdxArr[i] / colCnt) * font->size;
                 SDL_FRect dstrect = getDstRect(textbox, font->size, charCnt, i);
-                GRAPHIC_DrawSprite(texIdx, &srcrect, &dstrect);
+                GRAPHIC_DrawSprite(texID, &srcrect, &dstrect);
         }
 
         return 0;

@@ -1,59 +1,45 @@
 #include "input.h"
 
-static const int PLAYER_CNT = 2;
-
-/** @brief 动作函数列表
- *
- * 返回 0 代表成功，返回 1 代表失败，可以使用 SDL_GetError 获取错误信息
- */
-static int (**actions)(void);
-
+/** @brief 手柄设备最大数量 */
 static const int GAMEPAD_CNT = 2;
+
+/** @brief 手柄设备数组 */
 static SDL_Gamepad **gamepads = NULL;
 
-static int actionMap[SDL_SCANCODE_COUNT];
+/** @brief 键盘扫描码（scancode）表 */
+static int scancodeTab[SDL_SCANCODE_COUNT];
 
-int dummy(void)
-{
-        printf("event\n");
-        return 0;
-}
+/** @brief 手柄按键表 */
+static int gamepadButtonTab[SDL_GAMEPAD_BUTTON_COUNT];
+
+static bool gamepadButtonState[GAMEPAD_CNT][SDL_GAMEPAD_BUTTON_COUNT];
+
+/** @brief 从信号映射到扫描码的映射表 */
+static int *signalMap;
+
+/** @brief 信号变量数 */
+static int signalCnt;
 
 void INPUT_Init(lua_State *L)
 {
         /* 初始化手柄结构体 */
         gamepads = (SDL_Gamepad **)SDL_calloc(GAMEPAD_CNT, sizeof(SDL_Gamepad *));
-
-        /* 初始化动作函数表 */
-        actions = SDL_calloc(PLAYER_CNT * ACTION_CNT, sizeof *actions);
-        for (int i = 0; i < sizeof actions; ++i)
-        {
-                /* 将所有动作函数置为空函数 */
-                actions[i] = dummy;
-        }
-
-        /* TODO: 注册动作函数 */
 }
 
 void INPUT_DoKeyDown(SDL_Event *event)
 {
         if (event->key.repeat == 0)
         {
-                int (*action)(void) = actions[actionMap[event->key.scancode]];
-                if (action && action())
-                {
-                        SDL_Log("Action failed for scancode %d (%s): %s\n",
-                                (int)event->key.scancode,
-                                SDL_GetScancodeName(event->key.scancode),
-                                SDL_GetError());
-                }
+                scancodeTab[event->key.scancode] = 1;
         }
 }
 
-void INPUT_DoKeyPressing(void)
+void INPUT_DoKeyUp(SDL_Event *event)
 {
-        // const bool *keyState = SDL_GetKeyboardState(NULL);
-        /* 需要根据这个 keyState 判断某个动作是否需要执行 */
+        if (event->key.repeat == 0)
+        {
+                scancodeTab[event->key.scancode] = 0;
+        }
 }
 
 void INPUT_GamePadAdded(SDL_Event *event)
@@ -83,29 +69,54 @@ void INPUT_GamePadRemoved(SDL_Event *event)
         }
 }
 
-void INPUT_DoGamePadBtnDown(SDL_Event *event)
+void INPUT_DoGamePadBtnEvent(SDL_Event *event)
 {
         for (int i = 0; i < GAMEPAD_CNT; ++i)
         {
                 if (gamepads[i] && SDL_GetGamepadID(gamepads[i]) == event->gdevice.which)
                 {
-                        /* 在 lua 中处理不同键位 */
+                        int buttonIdx = event->gbutton.button;
+                        if (buttonIdx >= 0 && buttonIdx < SDL_GAMEPAD_BUTTON_COUNT)
+                        {
+                                gamepadButtonState[i][buttonIdx] = event->gbutton.down;
+                        }
+                        break;
                 }
         }
 }
 
-void INPUT_DoGamePadBtnPressing(void)
+int INPUT_GetSignal(SDL_Scancode scancode, SDL_GamepadButton gamepadbtn,
+                    InputDeviceType device, int gamepadIdx, TriggerType trigger)
 {
-        for (int i = 0; i < GAMEPAD_CNT; ++i)
+        switch (device)
         {
-                if (gamepads[i])
+        case INPUT_DEVICE_KEYBOARD:
+                if (scancode >= 0 && scancode < SDL_SCANCODE_COUNT)
                 {
-                        /* 获取手柄摇杆值和进行按键处理 */
+                        const bool *keyState = SDL_GetKeyboardState(NULL);
+                        switch (trigger)
+                        {
+                        case TRIGGER_HOLD:
+                                return scancodeTab[scancode];
+                        case TRIGGER_PRESS:
+                                return keyState[scancode];
+                        }
                 }
+                break;
+        case INPUT_DEVICE_GAMEPAD:
+                if (gamepadbtn >= 0 && gamepadbtn < SDL_GAMEPAD_BUTTON_COUNT)
+                {
+                        switch (trigger)
+                        {
+                        case TRIGGER_HOLD:
+                                if (gamepadIdx > 0 && gamepadIdx < 2)
+                                        return gamepadButtonState[gamepadIdx][gamepadbtn];
+                                break;
+                        case TRIGGER_PRESS:
+                                return SDL_GetGamepadButton(gamepads[gamepadIdx], gamepadbtn);
+                        }
+                }
+                break;
         }
-}
-
-void INPUT_RegisterAction(int (*actionFunc)(void), int player, ActionType type)
-{
-        actions[player * ACTION_CNT + (int)type] = actionFunc;
+        return -1;
 }

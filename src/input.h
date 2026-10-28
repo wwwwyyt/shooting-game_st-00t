@@ -11,26 +11,23 @@
 
 typedef enum
 {
-        ACTION_UP,
-        ACTION_DOWN,
-        ACTION_LEFT,
-        ACTION_RIGHT,
-        ACTION_BTN_A,
-        ACTION_BTN_B,
-        ACTION_BTN_C,
-        ACTION_BTN_X,
-        ACTION_BTN_Y,
-        ACTION_BTN_Z,
-        ACTION_L_SHOULDER,
-        ACTION_R_SHOULDER,
-        ACTION_START,
-        ACTION_CNT
-} ActionType;
+        TRIGGER_PRESS,
+        TRIGGER_HOLD,
+} TriggerType;
+
+typedef enum
+{
+        INPUT_DEVICE_KEYBOARD,
+        INPUT_DEVICE_GAMEPAD,
+} InputDeviceType;
 
 void INPUT_Init(lua_State *L);
 
-/** @brief 处理键盘按下这一瞬时信号 */
+/** @brief 用于在键盘按下时设置信号表 */
 void INPUT_DoKeyDown(SDL_Event *event);
+
+/** @brief 用于在键盘松开时设置信号表 */
+void INPUT_DoKeyUp(SDL_Event *event);
 
 /** @brief 处理手柄连接 */
 void INPUT_GamePadAdded(SDL_Event *event);
@@ -38,13 +35,13 @@ void INPUT_GamePadAdded(SDL_Event *event);
 /** @brief 处理手柄移除 */
 void INPUT_GamePadRemoved(SDL_Event *event);
 
-/** @brief 处理手柄按键按下这一瞬时信号 */
-void INPUT_DoGamePadBtnDown(SDL_Event *event);
+/** @brief 处理手柄按键按下或松开 */
+void INPUT_DoGamePadBtnEvent(SDL_Event *event);
 
-/** @brief 处理键盘按住这一连续信号 */
-void INPUT_DoKeyPressing(void);
-
-/** @brief 处理手柄按键按住这一连续信号 */
-void INPUT_DoGamePadBtnPressing(void);
+/** @brief 获取所有种类信号的表
+ *  @return 1 或 0 是正常的信号值，-1 表示数组越界
+ */
+int INPUT_GetSignal(SDL_Scancode scancode, SDL_GamepadButton gamepadbtn,
+                    InputDeviceType device, int gamepadIdx, TriggerType trigger);
 
 #endif /* SG_INPUT_H */
