@@ -1,24 +1,42 @@
 #include "graphic.h"
+#include <SDL3/SDL_surface.h>
+#include <SDL3_image/SDL_image.h>
 
-/* 逻辑分辨率 */
+/** @brief 逻辑分辨率宽度 */
 static const int LOGICAL_WIDTH = 640;
+
+/** @brief 逻辑分辨率高度 */
 static const int LOGICAL_HEIGHT = 480;
 
-/* 精灵的位置和纹理顶点 */
+/** @brief 精灵的位置和纹理顶点 */
 static const float QUAD_VERTICES[] = {
-    // 位置     // 纹理坐标
-    0.0f, 0.0f, 0.0f, 0.0f, // 左上
-    1.0f, 0.0f, 1.0f, 0.0f, // 右上
-    1.0f, 1.0f, 1.0f, 1.0f, // 右下
-    0.0f, 1.0f, 0.0f, 1.0f  // 左下
+        // 位置            // 纹理坐标
+        0.0f, 0.0f, 0.0f, 0.0f, // 左上
+        1.0f, 0.0f, 1.0f, 0.0f, // 右上
+        1.0f, 1.0f, 1.0f, 1.0f, // 右下
+        0.0f, 1.0f, 0.0f, 1.0f  // 左下
 };
 
-/* 精灵的 VBO */
+/** @brief 精灵的顶点缓冲对象（VBO）
+ *
+ *  2D 纹理需要使用该 VBO 进行绘制
+ */
 static GLuint spriteVBO;
 
-/* 纹理数组 */
+/** @brief 纹理数组 */
 static TextureArray textures;
 
+/** @breif 更新视口（Viewport）矩形
+ *
+ *  视口是窗口中真正有内容的区域，视口以外的部分会填充背景色（本项目默认为黑色）
+ * 
+ *  窗口初始化以及大小改变时，视口需要被更新
+ *
+ *  视口分辨率会参考逻辑分辨率（640x480）进行缩放，使其位于窗口中央
+ * 
+ *  @param windowW 窗口宽度
+ *  @param windowH 窗口高度
+ */
 static void updateViewport(int windowW, int windowH)
 {
         const float targetAspect = (float)LOGICAL_WIDTH / (float)LOGICAL_HEIGHT;
@@ -42,6 +60,7 @@ static void updateViewport(int windowW, int windowH)
         glViewport(viewportX, viewportY, viewportW, viewportH);
 }
 
+/** @brief 初始化纹理 VBO */
 static void initQuadVBO(void)
 {
         glGenBuffers(1, &spriteVBO);
@@ -51,10 +70,6 @@ static void initQuadVBO(void)
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-/** @brief 初始化 GRAPHIC 模块
- *
- * 在 GRAPHIC 开头的其他函数调用之前调用
- */
 int GRAPHIC_Init(lua_State *L)
 {
         /* 加载配置 */
@@ -67,7 +82,7 @@ int GRAPHIC_Init(lua_State *L)
         }
         lua_Integer n = luaL_len(L, -1);
         textures.size = n;
-        textures.data = calloc(n, sizeof(Texture));
+        textures.data = SDL_calloc(n, sizeof(Texture));
         for (lua_Integer i = 1; i <= n; ++i)
         {
                 lua_rawgeti(L, -1, i);
@@ -148,7 +163,7 @@ void GRAPHIC_SetMode(SDL_Window *window, GraphicMode mode)
         }
 }
 
-int GRAPHIC_DrawSprite(int idx, SDL_FRect *srcrect, SDL_FRect *dstrect)
+int GRAPHIC_DrawSprite(int idx, SDL_Rect *srcrect, SDL_Rect *dstrect)
 {
         Texture *tex = NULL;
         if (idx >= 0 && idx < textures.size)

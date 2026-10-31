@@ -1,4 +1,6 @@
 #include "text.h"
+#include "graphic.h"
+#include <SDL3/SDL_log.h>
 
 static int fontCnt;
 static Font *fonts;
@@ -11,12 +13,12 @@ static Font *fonts;
  *  @param charCnt 当前渲染文本的字符总数，由此可确定各字符所需的矩形位置
  *  @param charIdx 当前渲染文本的字符索引，从 0 开始
  *
- *  @return SDL_FRect 当前字符的目标渲染矩形
+ *  @return SDL_Rect 当前字符的目标渲染矩形
  */
-static SDL_FRect getDstRect(SDL_FRect *textbox, int fontSize, int charCnt, int charIdx)
+static SDL_Rect getDstRect(SDL_Rect *textbox, int fontSize, int charCnt, int charIdx)
 {
 
-        SDL_FRect dstrect = {0, 0, 0, 0};
+        SDL_Rect dstrect = {0, 0, 0, 0};
 
         /* 条件不满足，返回大小为 0 矩形 */
         if (!textbox || fontSize <= 0 || charCnt <= 0 || charIdx < 0 || charIdx >= charCnt)
@@ -74,7 +76,7 @@ int TEXT_Init(lua_State *L)
         return 0;
 }
 
-int TEXT_RenderText(int fontIdx, int charCnt, const int *charIdxArr, SDL_FRect *textbox)
+int TEXT_RenderText(int fontIdx, int charCnt, const int *charIdxArr, SDL_Rect *textbox)
 {
         /* 获取字体 */
         Font *font = &(fonts[fontIdx]);
@@ -88,12 +90,12 @@ int TEXT_RenderText(int fontIdx, int charCnt, const int *charIdxArr, SDL_FRect *
         int colCnt = texW / font->size;
 
         /* 按照字符的编码绘制字符 */
-        SDL_FRect srcrect = {0, 0, font->size, font->size};
+        SDL_Rect srcrect = {0, 0, font->size, font->size};
         for (int i = 0; i < charCnt; ++i)
         {
                 srcrect.x = (charIdxArr[i] % colCnt) * font->size;
                 srcrect.y = (charIdxArr[i] / colCnt) * font->size;
-                SDL_FRect dstrect = getDstRect(textbox, font->size, charCnt, i);
+                SDL_Rect dstrect = getDstRect(textbox, font->size, charCnt, i);
                 GRAPHIC_DrawSprite(texID, &srcrect, &dstrect);
         }
 

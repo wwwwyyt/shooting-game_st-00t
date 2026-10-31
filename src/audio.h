@@ -8,10 +8,6 @@
 
 #include <SDL3_mixer/SDL_mixer.h>
 
-#include <math.h>
-
-#include "queue.h"
-
 /** @brief 波形 */
 typedef enum
 {

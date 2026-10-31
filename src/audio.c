@@ -1,9 +1,20 @@
 #include "audio.h"
+#include <math.h>
+#include "queue.h"
 
+/** @brief 混音器 */
 static MIX_Mixer *mixer;
+
+/** @brief 音频资源结构体数组 */
 static MIX_Audio **audios;
-static int audioCnt;
+
+/** @brief 音频资源数量 */
+static int audioCnt = 0;
+
+/** @brief 音频流队列空间 */
 static const int STREAM_QUEUE_SIZE = 16;
+
+/** @brief 音频流队列 */
 static Queue streamQueue;
 
 /* 预设：小而脆的爆炸 */
@@ -39,17 +50,19 @@ static const ExplosionParams EXPLOSION_SHOOT = {
     .peak = 0.95f,
 };
 
-static int loadAudio(const char *path, MIX_Audio **audio)
+/** @brief 从文件加载音频资源 */
+static MIX_Audio *loadAudio(const char *path)
 {
-        *audio = MIX_LoadAudio(mixer, path, true);
-        if (!*audio)
+        MIX_Audio *audio = MIX_LoadAudio(mixer, path, true);
+        if (!audio)
         {
                 SDL_Log("Failed to load audio: %s", SDL_GetError());
-                return 1;
+                return audio;
         }
-        return 0;
+        return audio;
 }
 
+/** @brief 生成简单波形 */
 static float generateWave(WaveType type, float freq, float t)
 {
         float phase = freq * t; // 相位，单位是周期数
@@ -79,7 +92,7 @@ static float pinkNoise(PinkState *s, float white)
         s->b5 = -0.7616f * s->b5 - white * 0.0168980f;
         float pink = s->b0 + s->b1 + s->b2 + s->b3 + s->b4 + s->b5 + s->b6 + white * 0.5362f;
         s->b6 = white * 0.115926f;
-        return pink * 0.11f; // 缩放，避免过大
+        return pink * 0.11f;  // 缩放，避免过大
 }
 
 /** @brief 一阶低通滤波
@@ -151,27 +164,26 @@ static void generateExplosionSamples(float *buf, int n, int sample_rate,
 
 /** @brief 生成噪声 PCM
  *
- * 调用者负责 SDL_free
+ *  调用者负责 SDL_free
  *
- * @param out_count 返回样本数
+ *  @param outcount 返回样本数
  */
-float *generateNoise(NoiseType type, float duration, int sample_rate,
-                     int *out_count)
+float *generateNoise(NoiseType type, float duration, int sample_rate, int *outCnt)
 {
         int n = (int)(duration * (float)sample_rate);
         if (n <= 0)
         {
-                *out_count = 0;
+                *outCnt = 0;
                 return NULL;
         }
 
         float *buf = SDL_malloc((size_t)n * sizeof(float));
         if (!buf)
         {
-                *out_count = 0;
+                *outCnt = 0;
                 return NULL;
         }
-        *out_count = n;
+        *outCnt = n;
 
         switch (type)
         {
@@ -227,16 +239,17 @@ int AUDIO_Init(lua_State *L)
         }
 
         audioCnt = (int)luaL_len(L, -1);
-        audios = SDL_calloc(audioCnt, sizeof *audios);
+        audios = SDL_calloc(audioCnt, sizeof(MIX_Audio *));
 
         for (lua_Integer i = 1; i <= audioCnt; ++i)
         {
                 lua_rawgeti(L, -1, i);
 
-                /* 读取音频文件 */
+                /* 加载音频文件 */
                 lua_getfield(L, -1, "file");
                 const char *file = lua_tostring(L, -1);
-                if (loadAudio(file, &(audios[i - 1])))
+                audios[i - 1] = loadAudio(file);
+                if (!audios[i - 1])
                 {
                         return 1;
                 }

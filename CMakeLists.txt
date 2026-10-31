@@ -12,6 +12,9 @@ project(
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
+# 启用生成编译命令文件
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # 编译选项
 add_compile_options(
   -Wall
@@ -25,7 +28,7 @@ add_compile_options(
 # 设置输入文件夹
 set(
   CMAKE_RUNTIME_OUTPUT_DIRECTORY
-  "${CMAKE_BINARY_DIR}"
+  "${CMAKE_BINARY_DIR}/../"
 )
 
 # 查找 SDL3 及其扩展库

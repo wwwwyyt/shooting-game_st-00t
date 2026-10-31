@@ -27,9 +27,9 @@ static const char *APP_IDENTIFIER = "tech.cano.shuguang";
 static const int APP_SCREEN_WIDTH = 640;  /* 窗口默认分辨率 */
 static const int APP_SCREEN_HEIGHT = 480; /* 窗口默认分辨率 */
 static const char *APP_WINDOW_TITLE = "shuguang";
-static const GLfloat APP_CLEAR_COLOR_R = 0.1f;
-static const GLfloat APP_CLEAR_COLOR_G = 0.1f;
-static const GLfloat APP_CLEAR_COLOR_B = 0.1f;
+static const GLfloat APP_CLEAR_COLOR_R = 0.0f;
+static const GLfloat APP_CLEAR_COLOR_G = 0.0f;
+static const GLfloat APP_CLEAR_COLOR_B = 0.0f;
 static const GLfloat APP_CLEAR_COLOR_A = 1.0f;
 
 static SDL_Window *window;
@@ -104,10 +104,11 @@ static int render(void)
 }
 
 static void quit(void)
-{
+{    
         /* 清理音频模块 */
         AUDIO_Quit();
-
+        MIX_Quit();
+        
         /* 销毁 Lua 环境 */
         lua_close(L);
 }
@@ -218,6 +219,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
         case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED:
                 /* 处理窗口像素尺寸变化 */
                 GRAPHIC_SetMode(window, MODE_2D);
+                break;
         default:
                 break;
         }
@@ -255,10 +257,8 @@ SDL_AppResult SDL_AppIterate(void *appstate)
 /** 该函数在程序关闭时运行一次 */
 void SDL_AppQuit(void *appstate, SDL_AppResult result)
 {
-        /* 清理 SDL_mixer 的资源 */
-        MIX_Quit();
-
         /* 执行自定义退出逻辑 */
         quit();
+
         /* SDL 会自动销毁 window */
 }

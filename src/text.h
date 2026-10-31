@@ -5,7 +5,7 @@
 #include <lua.h>
 #include <lualib.h>
 
-#include "graphic.h"
+#include <SDL3/SDL_rect.h>
 
 typedef struct
 {
@@ -13,7 +13,10 @@ typedef struct
         int size;
 } Font;
 
+/** @brief 初始化文本模块 */
 int TEXT_Init(lua_State *L);
-int TEXT_RenderText(int fontIdx, int charCnt, const int *charIdxArr, SDL_FRect *textbox);
+
+/** @brief 渲染文本 */
+int TEXT_RenderText(int fontIdx, int charCnt, const int *charIdxArr, SDL_Rect *textbox);
 
 #endif /* SG_TEXT_H */

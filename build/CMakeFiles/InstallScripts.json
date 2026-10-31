@@ -1,7 +1,7 @@
 {
 	"InstallScripts" : 
 	[
-		"C:/Documents/Projects/shooting-game_st-00t/build/cmake_install.cmake"
+		"/home/we/Documents/Projects/shooting-game_st-00t/build/cmake_install.cmake"
 	],
 	"Parallel" : false
 }
